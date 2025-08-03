@@ -738,9 +738,8 @@ function renderProducts() {
             { value: 2000, label: "2KG" },
             { value: 5000, label: "5KG" }
           ]
-              .map(w => {
-              return `<option value="${w}">${w >= 1 ? w / 1 + "KG" : w + "g"}</option>`;
-            }).join('')}
+              .map(opt => `<option value="${opt.value}">${opt.label}</option>`)
+              .join('')}
           </select>
           <button onclick="addToCart1('${product.name}', 'kg')">+</button>
         </div>
