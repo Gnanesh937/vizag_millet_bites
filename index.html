@@ -684,7 +684,7 @@
     ];
   
   const products3 = [
-      { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 120 },
+      { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 300 },
       { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200 },
       { name: "Panchadara Gavvalu", image: "Panchadara Gavvalu.jpg", price: 100 },
       { name: "Bellam Gavvalu", image: "Bellam Gavvalu.jpeg", price: 100 },
@@ -1098,8 +1098,8 @@ function updateCartDisplay3() {
     if (!product) continue;
 
     const grams = cart[item].grams;
-    const pricePer100g = cart[item].price;
-    const itemTotal = (grams / 100) * pricePer100g;
+    const pricePer250g = cart[item].price;
+    const itemTotal = (grams / 100) * pricePer250g;
 
     total += itemTotal;
 
@@ -1107,9 +1107,9 @@ function updateCartDisplay3() {
       <div class="cart-item">
         <div class="cart-item-name">${item}</div>
         <div class="cart-item-qty">
-          <button onclick="adjustCartItem3('${item}', -100)">-</button>
+          <button onclick="adjustCartItem3('${item}', -250)">-</button>
           ${grams >= 1000 ? (grams / 1000).toFixed(2) + ' kg' : grams + ' g'}
-          <button onclick="adjustCartItem3('${item}', 100)">+</button>
+          <button onclick="adjustCartItem3('${item}', 250)">+</button>
         </div>
         <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
       </div>
