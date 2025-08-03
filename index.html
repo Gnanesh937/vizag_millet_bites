@@ -558,12 +558,12 @@
     <p>Healthy | Tasty | Affordable</p>
   </div>
 </section>
-  <a href="cartIcon">Cart</a>
+
   <section id="menu" class="menu">
     <h2>Our Menu</h2> 
-    <div class="cart-icon" id="cartIcon" style="text-align: right;font-weight: bold; padding: 10px 10px;text-size:3.0em;">
+    <div class="cart-icon" id="cartIcon2" style="text-align: right;font-weight: bold; padding: 10px 10px;text-size:3.0em;">
         🛒Cart
-        <span class="cart-count" id="cartCount">0</span>
+        <span class="cart-count" id="cartCount2">0</span>
     </div>
     <div class="product-grid" id="product-grid"></div>
   </section>
@@ -733,6 +733,8 @@
     function updateCartCount() {
       const count = Object.keys(cart).length;
       document.getElementById("cartCount").textContent = count;
+      const cartCount2 = document.getElementById("cartCount2");
+      if (cartCount2) cartCount2.textContent = count;
     }
 
     function updateCartDisplay() {
@@ -814,6 +816,7 @@
       
       // Cart panel toggle
       document.getElementById("cartIcon").addEventListener("click", toggleCartPanel);
+      document.getElementById("cartIcon2").addEventListener("click", toggleCartPanel);
       document.getElementById("closeCart").addEventListener("click", toggleCartPanel);
       document.getElementById("overlay").addEventListener("click", toggleCartPanel);
       
