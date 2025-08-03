@@ -760,9 +760,9 @@ function renderProducts() {
         cart[productName] = { qty: 0, price: product.price };
       }
       cart[productName].qty += qty;
-      updateStatus1(productName);
-      updateCartDisplay1();
-      updateCartCount1();
+      updateStatus(productName);
+      updateCartDisplay();
+      updateCartCount();
     }
 
 
