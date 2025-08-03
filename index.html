@@ -924,7 +924,7 @@ function renderProducts() {
       
       let cartItemsHTML = '';
       for (const item in cart) {
-        // product.price is per 250g, so per kg multiply by 4
+        // product.price is per 100g, so per kg multiply by 10
         const itemTotal = cart[item].qty * cart[item].price * 1;
         total += itemTotal;
         
@@ -932,9 +932,9 @@ function renderProducts() {
           <div class="cart-item">
             <div class="cart-item-name">${item}</div>
             <div class="cart-item-qty">
-              <button onclick="adjustCartItem('${item}', -1)">-</button>
+              <button onclick="adjustCartItem('${item}', -0.10)">-</button>
               ${cart[item].qty.toFixed(2)} kg
-              <button onclick="adjustCartItem('${item}', 1)">+</button>
+              <button onclick="adjustCartItem('${item}', 0.10)">+</button>
             </div>
             <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
           </div>
