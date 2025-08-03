@@ -671,21 +671,21 @@
       { name: "combo 2", image: "Hot Gavvalu.jpeg", price: 299 },
       { name: "Combo 3", image: "Hot Gavvalu.jpeg", price: 399 },
       { name: "Combo 4", image: "Hot Gavvalu.jpeg", price: 599 },
-      { name: "Ragi Mixture", image: "Ragi Mixture.jpeg", price: 150 },
-      { name: "Ragi Chegodilu", image: "Ragi Chegodilu.jpeg", price: 150 },
-      { name: "Ragi Murukkulu", image: "Ragi Murukkulu.jpeg", price: 150 },
-      { name: "Jowar Mixture", image: "Jowar Mixture.jpeg", price: 150 },
-      { name: "Jowar Murukkulu", image: "Jowar Murukkulu.jpeg", price: 150 },
-      { name: "Jowar Ribbon Pakodi", image: "Jowar Ribbon Pakodi.jpeg", price: 150 },
-      { name: "Foxtail Sev", image: "Foxtail Sev.jpeg", price: 150 },
-      { name: "Arikalu Jantikalu", image: "Arikalu Jantikalu.jpeg", price: 150 },
-      { name: "Samalu Boondi", image: "Samalu Boondi.jpeg", price: 150 },
-      { name: "Dry Fruit Mixture", image: "Dry Fruit Mixture.jpeg", price: 250 },
-      { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 300 },
+      { name: "Ragi Mixture", image: "Ragi Mixture.jpeg", price: 60 },
+      { name: "Ragi Chegodilu", image: "Ragi Chegodilu.jpeg", price: 60 },
+      { name: "Ragi Murukkulu", image: "Ragi Murukkulu.jpeg", price: 60 },
+      { name: "Jowar Mixture", image: "Jowar Mixture.jpeg", price: 60 },
+      { name: "Jowar Murukkulu", image: "Jowar Murukkulu.jpeg", price: 60 },
+      { name: "Jowar Ribbon Pakodi", image: "Jowar Ribbon Pakodi.jpeg", price: 60 },
+      { name: "Foxtail Sev", image: "Foxtail Sev.jpeg", price: 60 },
+      { name: "Arikalu Jantikalu", image: "Arikalu Jantikalu.jpeg", price: 60 },
+      { name: "Samalu Boondi", image: "Samalu Boondi.jpeg", price: 60 },
+      { name: "Dry Fruit Mixture", image: "Dry Fruit Mixture.jpeg", price: 180 },
+      { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 120 },
       { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200 },
-      { name: "Panchadara Gavvalu", image: "Panchadara Gavvalu.jpg", price: 150 },
-      { name: "Bellam Gavvalu", image: "Bellam Gavvalu.jpeg", price: 160 },
-      { name: "Hot Gavvalu", image: "Hot Gavvalu.jpeg", price: 160 }
+      { name: "Panchadara Gavvalu", image: "Panchadara Gavvalu.jpg", price: 100 },
+      { name: "Bellam Gavvalu", image: "Bellam Gavvalu.jpeg", price: 100 },
+      { name: "Hot Gavvalu", image: "Hot Gavvalu.jpeg", price: 100 }
     ];
 
     const weights = [100, 250, 500, 1 , 5 ];
@@ -706,11 +706,11 @@ function renderProducts() {
         <h4>${product.name}</h4>
         <p>₹${product.price} / pack</p>
         <div class="quantity-controls">
-          <button onclick="removeFromCart('${product.name}', 'pack')">-</button>
+          <button onclick="removeFromCart1('${product.name}', 'pack')">-</button>
           <select id="select-${product.name}">
             ${[1, 2, 3, 5].map(p => `<option value="${p}">${p} Pack${p > 1 ? 's' : ''}</option>`).join('')}
           </select>
-          <button onclick="addToCart('${product.name}', 'pack')">+</button>
+          <button onclick="addToCart1('${product.name}', 'pack')">+</button>
         </div>
         <div class="cart-status" id="status-${product.name}"></div>
       `;
@@ -726,12 +726,12 @@ function renderProducts() {
         <div class="discount-badge">20% OFF</div>
         <img src="${product.image}" alt="${product.name}" />
         <h4>${product.name}</h4>
-        <p>₹${product.price} / 100g</p>
+        <p>₹${product.price} - 100g</p>
         <div class="quantity-controls">
           <button onclick="removeFromCart('${product.name}', 'kg')">-</button>
           <select id="select-${product.name}">
             ${[100, 250, 500, 1000, 2000, 5000].map(w => {
-              return `<option value="${w}">${w >= 1000 ? w / 1000 + "KG" : w + "g"}</option>`;
+              return `<option value="${w}">${w >= 1 ? w / 1 + "KG" : w + "g"}</option>`;
             }).join('')}
           </select>
           <button onclick="addToCart('${product.name}', 'kg')">+</button>
@@ -742,7 +742,7 @@ function renderProducts() {
     });
 }
 
-    function addToCart(productName) {
+    function addToCart1(productName) {
       const qty = parseFloat(document.getElementById(`select-${productName}`).value);
       if (!cart[productName]) {
         const product = products.find(p => p.name === productName);
@@ -753,8 +753,29 @@ function renderProducts() {
       updateCartDisplay();
       updateCartCount();
     }
+      function addToCart(productName) {
+      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
+      if (!cart[productName]) {
+        const product = products.find(p => p.name === productName);
+        cart[productName] = { qty: 0, price: product.price };
+      }
+      cart[productName].qty += qty;
+      updateStatus1(productName);
+      updateCartDisplay();
+      updateCartCount();
+    }
 
-    function removeFromCart(productName) {
+
+    function removeFromCart1(productName) {
+      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
+      if (!cart[productName]) return;
+      cart[productName].qty -= qty;
+      if (cart[productName].qty <= 0) delete cart[productName];
+      updateStatus(productName);
+      updateCartDisplay();
+      updateCartCount();
+    }
+      function removeFromCart(productName) {
       const qty = parseFloat(document.getElementById(`select-${productName}`).value);
       if (!cart[productName]) return;
       cart[productName].qty -= qty;
@@ -764,6 +785,14 @@ function renderProducts() {
       updateCartCount();
     }
 
+    function updateStatus1(productName) {
+      const status = document.getElementById(`status-${productName}`);
+      if (cart[productName]) {
+        status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} pack`;
+      } else {
+        status.textContent = "";
+      }
+    }
     function updateStatus(productName) {
       const status = document.getElementById(`status-${productName}`);
       if (cart[productName]) {
