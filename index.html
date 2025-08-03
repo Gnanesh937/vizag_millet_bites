@@ -680,7 +680,10 @@
       { name: "Foxtail Sev", image: "Foxtail Sev.jpeg", price: 60 },
       { name: "Arikalu Jantikalu", image: "Arikalu Jantikalu.jpeg", price: 60 },
       { name: "Samalu Boondi", image: "Samalu Boondi.jpeg", price: 60 },
-      { name: "Dry Fruit Mixture", image: "Dry Fruit Mixture.jpeg", price: 180 },
+      { name: "Dry Fruit Mixture", image: "Dry Fruit Mixture.jpeg", price: 180 }
+    ];
+  
+  const products3 = [
       { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 120 },
       { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200 },
       { name: "Panchadara Gavvalu", image: "Panchadara Gavvalu.jpg", price: 100 },
@@ -748,7 +751,7 @@ function renderProducts() {
       grid.appendChild(div);
     });
   
-    products
+    products3
     .filter(product => !product.name.toLowerCase().includes("combo"))
     .forEach(product => {
       const div = document.createElement("div");
@@ -1033,7 +1036,7 @@ function adjustCartItem1(productName, gramAdjustment) {
 
   function addToCart3(productName) {
   const grams = parseFloat(document.getElementById(`select-${productName}`).value);
-  const product = products.find(p => p.name === productName);
+  const product = products3.find(p => p.name === productName);
   if (!product) return;
 
   const units = grams / 100; // convert to number of 100g units
@@ -1091,7 +1094,7 @@ function updateCartDisplay3() {
 
   let cartItemsHTML = '';
   for (const item in cart) {
-    const product = products.find(p => p.name === item);
+    const product = products3.find(p => p.name === item);
     if (!product) continue;
 
     const grams = cart[item].grams;
