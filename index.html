@@ -753,8 +753,8 @@ products
 function addToCart(productName, unitType) {
   const select = document.getElementById(`select-${productName}`);
   const qnt = parseInt(selectElement.value);
-const pricePer100g = product.price;
-const total = (units / 100) * pricePer100g;
+  const pricePer100g = product.price;
+  const total = (units / 100) * pricePer100g;
   if (!cart[productName]) {
     const product = products.find(p => p.name === productName);
     cart[productName] = { qty: 0, price: product.price, unit: unitType };
