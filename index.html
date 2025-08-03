@@ -706,11 +706,11 @@ function renderProducts() {
         <h4>${product.name}</h4>
         <p>₹${product.price} / pack</p>
         <div class="quantity-controls">
-          <button onclick="removeFromCart1('${product.name}', 'pack')">-</button>
+          <button onclick="removeFromCart('${product.name}', 'pack')">-</button>
           <select id="select-${product.name}">
             ${[1, 2, 3, 5].map(p => `<option value="${p}">${p} Pack${p > 1 ? 's' : ''}</option>`).join('')}
           </select>
-          <button onclick="addToCart1('${product.name}', 'pack')">+</button>
+          <button onclick="addToCart('${product.name}', 'pack')">+</button>
         </div>
         <div class="cart-status" id="status-${product.name}"></div>
       `;
@@ -728,13 +728,13 @@ function renderProducts() {
         <h4>${product.name}</h4>
         <p>₹${product.price} - 100g</p>
         <div class="quantity-controls">
-          <button onclick="removeFromCart('${product.name}', 'kg')">-</button>
+          <button onclick="removeFromCart1('${product.name}', 'kg')">-</button>
           <select id="select-${product.name}">
             ${[100, 250, 500, 1000, 2000, 5000].map(w => {
-              return `<option value="${w}">${w >= 1 ? w / 1 + "KG" : w + "g"}</option>`;
+              return `<option value="${w}">${w >= 1000 ? w / 1000 + "KG" : w + "g"}</option>`;
             }).join('')}
           </select>
-          <button onclick="addToCart('${product.name}', 'kg')">+</button>
+          <button onclick="addToCart1('${product.name}', 'kg')">+</button>
         </div>
         <div class="cart-status" id="status-${product.name}"></div>
       `;
