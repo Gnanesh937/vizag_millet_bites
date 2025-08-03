@@ -698,9 +698,9 @@
           <div class="quantity-controls">
             <button onclick="removeFromCart('${product.name}')">-</button>
             <select id="select-${product.name}">
-            if(weights=100||250||500){
+            if (weights=100||250||500){
               ${weights.map(w => `<option value="${w}">${w}G</option>`).join('')}}
-            else{
+            else {
               ${weights.map(w => `<option value="${w}">${w}KG</option>`).join('')}
             }
             </select>
