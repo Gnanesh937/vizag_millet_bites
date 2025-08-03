@@ -960,31 +960,21 @@ function renderProducts() {
       updateCartCount1();
     }
 
-    function toggleCartPanel() {
+    function toggleCartPanel1() {
       document.getElementById("cartPanel").classList.toggle("active");
       document.getElementById("overlay").classList.toggle("active");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      showSlides();
-      renderProducts();
+      showSlides1();
+      renderProducts1();
       
       // Cart panel toggle
-      document.getElementById("cartIcon").addEventListener("click", toggleCartPanel);
-      document.getElementById("cartIcon2").addEventListener("click", toggleCartPanel);
-      document.getElementById("closeCart").addEventListener("click", toggleCartPanel);
-      document.getElementById("overlay").addEventListener("click", toggleCartPanel);
-      
-      // Clear cart button
-      document.querySelector(".clear").addEventListener("click", () => {
-        for (const item in cart) {
-          delete cart[item];
-          updateStatus1(item);
-        }
-        updateCartDisplay1();
-        updateCartCount1();
-      });
-      
+      document.getElementById("cartIcon").addEventListener("click", toggleCartPanel1);
+      document.getElementById("cartIcon2").addEventListener("click", toggleCartPanel1);
+      document.getElementById("closeCart").addEventListener("click", toggleCartPanel1);
+      document.getElementById("overlay").addEventListener("click", toggleCartPanel1);
+            
       // Order button
       document.querySelector(".order").addEventListener("click", sendOrder);
     });
