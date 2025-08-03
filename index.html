@@ -501,6 +501,12 @@
       bottom: 15px;
       width: 100%;
     }
+    .menu-section {
+  background-color: #f1f8e9;
+  padding: 20px 10px;
+  border-radius: 16px;
+}
+
 
   </style>
 </head>
@@ -688,12 +694,12 @@
 function renderProducts() {
   const grid = document.getElementById("product-grid");
   grid.innerHTML = `
-    <div>
-      <h3 style="color:#2e7d32;">Combo Packs</h3>
+    <div class="menu-section">
+      <h3 style="color:#2e7d32; margin-bottom: 10px;">Combo Packs</h3>
       <div class="product-grid" id="combo-grid"></div>
     </div>
-    <div>
-      <h3 style="color:#2e7d32;">Regular Items</h3>
+    <div class="menu-section" style="margin-top: 40px;">
+      <h3 style="color:#2e7d32; margin-bottom: 10px;">Regular Items</h3>
       <div class="product-grid" id="regular-grid"></div>
     </div>
   `;
