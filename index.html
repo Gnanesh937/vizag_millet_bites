@@ -717,29 +717,37 @@ function renderProducts() {
       grid.appendChild(div);
     });
 
-  products
-    .filter(product => !product.name.toLowerCase().includes("combo"))
-    .forEach(product => {
-      const div = document.createElement("div");
-      div.className = "product-card";
-      div.innerHTML = `
-        <div class="discount-badge">20% OFF</div>
-        <img src="${product.image}" alt="${product.name}" />
-        <h4>${product.name}</h4>
-        <p>₹${product.price} / 100g</p>
-        <div class="quantity-controls">
-          <button onclick="removeFromCart('${product.name}', 'kg')">-</button>
-          <select id="select-${product.name}">
-            ${[100, 250, 500, 1000, 2000, 5000].map(w => {
-              return `<option value="${w}">${w >= 1 ? w / 1 + "KG" : w + "g"}</option>`;
-            }).join('')}
-          </select>
-          <button onclick="addToCart('${product.name}', 'kg')">+</button>
-        </div>
-        <div class="cart-status" id="status-${product.name}"></div>
-      `;
-      grid.appendChild(div);
-    });
+products
+  .filter(product => !product.name.toLowerCase().includes("combo"))
+  .forEach(product => {
+    const div = document.createElement("div");
+    div.className = "product-card";
+
+    div.innerHTML = `
+      <div class="discount-badge">20% OFF</div>
+      <img src="${product.image}" alt="${product.name}" />
+      <h4>${product.name}</h4>
+      <p>₹${product.price} / 100g</p>
+      <div class="quantity-controls">
+        <button onclick="removeFromCart('${product.name}', 'kg')">-</button>
+        <select id="select-${product.name}">
+          ${[
+            { value: 100, label: "100g" },
+            { value: 250, label: "250g" },
+            { value: 500, label: "500g" },
+            { value: 1000, label: "1KG" },
+            { value: 2000, label: "2KG" },
+            { value: 5000, label: "5KG" }
+          ]
+            .map(opt => `<option value="${opt.value}">${opt.label}</option>`)
+            .join('')}
+        </select>
+        <button onclick="addToCart('${product.name}', 'kg')">+</button>
+      </div>
+      <div class="cart-status" id="status-${product.name}"></div>
+    `;
+    grid.appendChild(div);
+  });
 }
 
 function addToCart(productName, unitType) {
