@@ -881,7 +881,6 @@ function renderProducts() {
       document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
     }
 
-
     function adjustCartItem(productName, adjustment) {
       if (!cart[productName]) return;
       
@@ -940,6 +939,50 @@ function renderProducts() {
         }
         updateCartDisplay();
         updateCartCount();
+      });
+      
+      // Order button
+      document.querySelector(".order").addEventListener("click", sendOrder);
+    });
+
+  
+    function adjustCartItem1(productName, adjustment) {
+      if (!cart[productName]) return;
+      
+      cart[productName].qty += adjustment;
+      
+      if (cart[productName].qty <= 0) {
+        delete cart[productName];
+      }
+      
+      updateStatus1(productName);
+      updateCartDisplay1();
+      updateCartCount1();
+    }
+
+    function toggleCartPanel() {
+      document.getElementById("cartPanel").classList.toggle("active");
+      document.getElementById("overlay").classList.toggle("active");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showSlides();
+      renderProducts();
+      
+      // Cart panel toggle
+      document.getElementById("cartIcon").addEventListener("click", toggleCartPanel);
+      document.getElementById("cartIcon2").addEventListener("click", toggleCartPanel);
+      document.getElementById("closeCart").addEventListener("click", toggleCartPanel);
+      document.getElementById("overlay").addEventListener("click", toggleCartPanel);
+      
+      // Clear cart button
+      document.querySelector(".clear").addEventListener("click", () => {
+        for (const item in cart) {
+          delete cart[item];
+          updateStatus1(item);
+        }
+        updateCartDisplay1();
+        updateCartCount1();
       });
       
       // Order button
