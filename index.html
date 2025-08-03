@@ -975,26 +975,38 @@ function updateCartDisplay1() {
 
   let cartItemsHTML = '';
   for (const item in cart) {
-    // CHANGE THIS BLOCK:
     const cartItem = cart[item];
     let itemTotal = 0;
     let displayQty = "";
+    let qtyControls = "";
 
     if (cartItem.qty !== undefined) {
       // Combo pack
       itemTotal = cartItem.qty * cartItem.price;
       displayQty = `${cartItem.qty} Pack`;
+      qtyControls = `
+        <button onclick="adjustCartItem1('${item}', -1)">-</button>
+        ${cartItem.qty}
+        <button onclick="adjustCartItem1('${item}', 1)">+</button>
+      `;
     } else if (cartItem.grams !== undefined) {
       // By weight
       itemTotal = (cartItem.grams / 100) * cartItem.price;
       displayQty = cartItem.grams >= 1000 ? `${(cartItem.grams / 1000).toFixed(2)} kg` : `${cartItem.grams} g`;
+      qtyControls = `
+        <button onclick="adjustCartItem1('${item}', -100)">-</button>
+        ${cartItem.grams >= 1000 ? (cartItem.grams / 1000).toFixed(2) + ' kg' : cartItem.grams + ' g'}
+        <button onclick="adjustCartItem1('${item}', 100)">+</button>
+      `;
     }
 
     total += itemTotal;
 
     cartItemsHTML += `
-      <div>
-        ${item}: ${displayQty} - ₹${itemTotal.toFixed(2)}
+      <div class="cart-item">
+        <div class="cart-item-name">${item}</div>
+        <div class="cart-item-qty">${qtyControls}</div>
+        <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
       </div>
     `;
   }
@@ -1096,23 +1108,37 @@ function updateCartDisplay3() {
 
   let cartItemsHTML = '';
   for (const item in cart) {
-    const product = products3.find(p => p.name === item);
-    if (!product) continue;
+    const cartItem = cart[item];
+    let itemTotal = 0;
+    let displayQty = "";
+    let qtyControls = "";
 
-    const grams = cart[item].grams;
-    const pricePer250g = cart[item].price;
-    const itemTotal = (grams / 100) * pricePer250g;
+    if (cartItem.qty !== undefined) {
+      // Combo pack
+      itemTotal = cartItem.qty * cartItem.price;
+      displayQty = `${cartItem.qty} Pack`;
+      qtyControls = `
+        <button onclick="adjustCartItem3('${item}', -1)">-</button>
+        ${cartItem.qty}
+        <button onclick="adjustCartItem3('${item}', 1)">+</button>
+      `;
+    } else if (cartItem.grams !== undefined) {
+      // By weight
+      itemTotal = (cartItem.grams / 100) * cartItem.price;
+      displayQty = cartItem.grams >= 1000 ? `${(cartItem.grams / 1000).toFixed(2)} kg` : `${cartItem.grams} g`;
+      qtyControls = `
+        <button onclick="adjustCartItem3('${item}', -250)">-</button>
+        ${cartItem.grams >= 1000 ? (cartItem.grams / 1000).toFixed(2) + ' kg' : cartItem.grams + ' g'}
+        <button onclick="adjustCartItem3('${item}', 250)">+</button>
+      `;
+    }
 
     total += itemTotal;
 
     cartItemsHTML += `
       <div class="cart-item">
         <div class="cart-item-name">${item}</div>
-        <div class="cart-item-qty">
-          <button onclick="adjustCartItem3('${item}', -250)">-</button>
-          ${grams >= 1000 ? (grams / 1000).toFixed(2) + ' kg' : grams + ' g'}
-          <button onclick="adjustCartItem3('${item}', 250)">+</button>
-        </div>
+        <div class="cart-item-qty">${qtyControls}</div>
         <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
       </div>
     `;
