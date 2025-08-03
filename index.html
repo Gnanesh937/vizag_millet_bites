@@ -709,11 +709,11 @@ function renderProducts() {
         <h4>${product.name}</h4>
         <p>₹${product.price} - pack</p>
         <div class="quantity-controls">
-          <button onclick="removeFromCart1('${product.name}', 'pack')">-</button>
+          <button onclick="removeFromCart('${product.name}', 'pack')">-</button>
           <select id="select-${product.name}">
             ${[1, 2, 3, 5].map(p => `<option value="${p}">${p} Pack${p > 1 ? 's' : ''}</option>`).join('')}
           </select>
-          <button onclick="addToCart1('${product.name}', 'pack')">+</button>
+          <button onclick="addToCart('${product.name}', 'pack')">+</button>
         </div>
         <div class="cart-status" id="status-${product.name}"></div>
       `;
@@ -1235,33 +1235,20 @@ function adjustCartItemUnified(productName, adjustment) {
 
   if (cart[productName].qty !== undefined) {
     cart[productName].qty += adjustment;
-    if (cart[productName].qty < 1) {
+    if (cart[productName].qty <= 0) {
       delete cart[productName];
     }
   } else if (cart[productName].grams !== undefined) {
     cart[productName].grams += adjustment;
-    if (cart[productName].grams < 1) {
+    if (cart[productName].grams <= 0) {
       delete cart[productName];
     }
   }
 
-  updateStatusUnified(productName);
+  // Update status if needed
+  // updateStatus(productName); // If you have a status display per product
   updateCartDisplayUnified();
-  updateCartCount();
-}
-
-function updateStatusUnified(productName) {
-  const status = document.getElementById(`status-${productName}`);
-  if (!cart[productName]) {
-    status.textContent = "";
-    return;
-  }
-  const cartItem = cart[productName];
-  if (cartItem.qty !== undefined) {
-    status.textContent = `In cart: ${cartItem.qty} Pack${cartItem.qty > 1 ? 's' : ''}`;
-  } else if (cartItem.grams !== undefined) {
-    status.textContent = `In cart: ${cartItem.grams >= 1000 ? (cartItem.grams / 1000).toFixed(2) + ' kg' : cartItem.grams + ' g'}`;
-  }
+  // updateCartCount(); // If you have a cart count display
 }
   </script>
 </body>
