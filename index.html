@@ -661,19 +661,19 @@
     });
   
   const products = [
-      { name: "combo 1", image: "Hot Gavvalu.jpeg", price: 299 },
-      { name: "combo 2", image: "Hot Gavvalu.jpeg", price: 399 },
-      { name: "Combo 3", image: "Hot Gavvalu.jpeg", price: 599 },
+      { name: "combo 1", image: "Hot Gavvalu.jpeg", price:  },
+      { name: "combo 2", image: "Hot Gavvalu.jpeg", price: 299 },
+      { name: "Combo 3", image: "Hot Gavvalu.jpeg", price: 399 },
       { name: "Combo 4", image: "Hot Gavvalu.jpeg", price: 599 },
       { name: "Ragi Mixture", image: "Ragi Mixture.jpeg", price: 150 },
-      { name: "Ragi Chegodilu", image: "Ragi Chegodilu.jpeg", price: 160 },
-      { name: "Ragi Murukkulu", image: "Ragi Murukkulu.jpeg", price: 170 },
+      { name: "Ragi Chegodilu", image: "Ragi Chegodilu.jpeg", price: 150 },
+      { name: "Ragi Murukkulu", image: "Ragi Murukkulu.jpeg", price: 150 },
       { name: "Jowar Mixture", image: "Jowar Mixture.jpeg", price: 150 },
       { name: "Jowar Murukkulu", image: "Jowar Murukkulu.jpeg", price: 150 },
-      { name: "Jowar Ribbon Pakodi", image: "Jowar Ribbon Pakodi.jpeg", price: 160 },
-      { name: "Foxtail Sev", image: "Foxtail Sev.jpeg", price: 180 },
+      { name: "Jowar Ribbon Pakodi", image: "Jowar Ribbon Pakodi.jpeg", price: 150 },
+      { name: "Foxtail Sev", image: "Foxtail Sev.jpeg", price: 150 },
       { name: "Arikalu Jantikalu", image: "Arikalu Jantikalu.jpeg", price: 150 },
-      { name: "Samalu Boondi", image: "Samalu Boondi.jpeg", price: 140 },
+      { name: "Samalu Boondi", image: "Samalu Boondi.jpeg", price: 150 },
       { name: "Dry Fruit Mixture", image: "Dry Fruit Mixture.jpeg", price: 250 },
       { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 300 },
       { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200 },
@@ -682,7 +682,7 @@
       { name: "Hot Gavvalu", image: "Hot Gavvalu.jpeg", price: 160 }
     ];
 
-    const weights = [0.25, 0.5, 1, 2, 3];
+    const weights = [0.10, 0.25, 0.5, 1, 5];
     const cart = {};
 
     function renderProducts() {
@@ -698,7 +698,7 @@
           <div class="quantity-controls">
             <button onclick="removeFromCart('${product.name}')">-</button>
             <select id="select-${product.name}">
-              ${weights.map(w => `<option value="${w}">${w} G</option>`).join('')}
+              ${weights.map(w => `<option value="${w}">${w} KG</option>`).join('')}
             </select>
             <button onclick="addToCart('${product.name}')">+</button>
           </div>
