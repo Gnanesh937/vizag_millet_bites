@@ -753,8 +753,6 @@ products
 function addToCart(productName, unitType) {
   const select = document.getElementById(`select-${productName}`);
   const qnt = parseInt(selectElement.value);
-  const pricePer100g = product.price;
-  const total = (units / 100) * pricePer100g;
   if (!cart[productName]) {
     const product = products.find(p => p.name === productName);
     cart[productName] = { qty: 0, price: product.price, unit: unitType };
@@ -811,7 +809,7 @@ function updateCartDisplay() {
     if (unit === "pack") {
       itemTotal = cart[item].qty * cart[item].price;
     } else {
-      itemTotal = (cart[item].qty * cart[item].price) / 0.25; // ₹150 per 100g = ₹600 per kg => divide by 0.25
+      itemTotal = (cart[item].qty * cart[item].price) / 0.10;// ₹150 per 100g = ₹600 per kg => divide by 0.25
     }
 
     total += itemTotal;
