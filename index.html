@@ -899,15 +899,20 @@ function addToCart1(productName) {
   updateCartCount1();
 }
 
-    function removeFromCart1(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
-      if (!cart[productName]) return;
-      cart[productName].qty -= qty;
-      if (cart[productName].qty <= 0) delete cart[productName];
-      updateStatus1(productName);
-      updateCartDisplay1();
-      updateCartCount1();
-    }
+function removeFromCart1(productName) {
+  const grams = parseFloat(document.getElementById(`select-${productName}`).value);
+  if (!cart[productName]) return;
+
+  cart[productName].grams -= grams;
+
+  if (cart[productName].grams <= 0) {
+    delete cart[productName];
+  }
+
+  updateStatus1(productName);
+  updateCartDisplay1();
+  updateCartCount1();
+}
 
 function updateStatus1(productName) {
   const status = document.getElementById(`status-${productName}`);
