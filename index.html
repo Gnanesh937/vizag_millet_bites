@@ -882,17 +882,22 @@ function renderProducts() {
       updateCartCount();
     }
 
-      function addToCart1(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
-      if (!cart[productName]) {
-        const product = products.find(p => p.name === productName);
-        cart[productName] = { qty: 0, price: product.price };
-      }
-      cart[productName].qty += qty;
-      updateStatus1(productName);
-      updateCartDisplay1();
-      updateCartCount1();
-    }
+function addToCart1(productName) {
+  const grams = parseFloat(document.getElementById(`select-${productName}`).value);
+  const product = products.find(p => p.name === productName);
+  if (!product) return;
+
+  const units = grams / 100; // convert to number of 100g units
+
+  if (!cart[productName]) {
+    cart[productName] = { grams: 0, price: product.price };
+  }
+  cart[productName].grams += grams;
+
+  updateStatus1(productName);
+  updateCartDisplay1();
+  updateCartCount1();
+}
 
     function removeFromCart1(productName) {
       const qty = parseFloat(document.getElementById(`select-${productName}`).value);
@@ -904,14 +909,15 @@ function renderProducts() {
       updateCartCount1();
     }
 
-    function updateStatus1(productName) {
-      const status = document.getElementById(`status-${productName}`);
-      if (cart[productName]) {
-        status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} Kg`;
-      } else {
-        status.textContent = "";
-      }
-    }
+function updateStatus1(productName) {
+  const status = document.getElementById(`status-${productName}`);
+  if (cart[productName]) {
+    const grams = cart[productName].grams;
+    status.textContent = `In cart: ${grams >= 1000 ? (grams / 1000).toFixed(2) + ' kg' : grams + ' g'}`;
+  } else {
+    status.textContent = "";
+  }
+}
       function updateCartCount1() {
       const count = Object.keys(cart).length;
       document.getElementById("cartCount").textContent = count;
@@ -919,52 +925,57 @@ function renderProducts() {
       if (cartCount2) cartCount2.textContent = count;
     }
 
-    function updateCartDisplay1() {
-      const cartItemsContainer = document.getElementById("panel-cart-items");
-      let total = 0;
-      
-      if (Object.keys(cart).length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-        document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
-        return;
-      }
-      
-      let cartItemsHTML = '';
-      for (const item in cart) {
-        // product.price is per 100g, so per kg multiply by 10
-        const itemTotal = cart[item].qty * cart[item].price * 1;
-        total += itemTotal;
-        
-        cartItemsHTML += `
-          <div class="cart-item">
-            <div class="cart-item-name">${item}</div>
-            <div class="cart-item-qty">
-              <button onclick="adjustCartItem1('${item}', -0.10)">-</button>
-              ${cart[item].qty.toFixed(2)} kg
-              <button onclick="adjustCartItem1('${item}', 0.10)">+</button>
-            </div>
-            <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
-          </div>
-        `;
-      }
-      
-      cartItemsContainer.innerHTML = cartItemsHTML;
-      document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
-    }
+function updateCartDisplay1() {
+  const cartItemsContainer = document.getElementById("panel-cart-items");
+  let total = 0;
+
+  if (Object.keys(cart).length === 0) {
+    cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
+    return;
+  }
+
+  let cartItemsHTML = '';
+  for (const item in cart) {
+    const product = products.find(p => p.name === item);
+    if (!product) continue;
+
+    const grams = cart[item].grams;
+    const pricePer100g = cart[item].price;
+    const itemTotal = (grams / 100) * pricePer100g;
+
+    total += itemTotal;
+
+    cartItemsHTML += `
+      <div class="cart-item">
+        <div class="cart-item-name">${item}</div>
+        <div class="cart-item-qty">
+          <button onclick="adjustCartItem1('${item}', -100)">-</button>
+          ${grams >= 1000 ? (grams / 1000).toFixed(2) + ' kg' : grams + ' g'}
+          <button onclick="adjustCartItem1('${item}', 100)">+</button>
+        </div>
+        <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
+      </div>
+    `;
+  }
+
+  cartItemsContainer.innerHTML = cartItemsHTML;
+  document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
+}
   
-    function adjustCartItem1(productName, adjustment) {
-      if (!cart[productName]) return;
-      
-      cart[productName].qty += adjustment;
-      
-      if (cart[productName].qty <= 0) {
-        delete cart[productName];
-      }
-      
-      updateStatus1(productName);
-      updateCartDisplay1();
-      updateCartCount1();
-    }
+function adjustCartItem1(productName, gramAdjustment) {
+  if (!cart[productName]) return;
+
+  cart[productName].grams += gramAdjustment;
+
+  if (cart[productName].grams <= 0) {
+    delete cart[productName];
+  }
+
+  updateStatus1(productName);
+  updateCartDisplay1();
+  updateCartCount1();
+}
 
     function toggleCartPanel1() {
       document.getElementById("cartPanel").classList.toggle("active");
