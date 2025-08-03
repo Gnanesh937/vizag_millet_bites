@@ -783,16 +783,16 @@ function renderProducts() {
 }
 
       function addToCart(productName) {
-  const qty = parseInt(document.getElementById(`select-${productName}`).value);
-  if (!cart[productName]) {
-    const product = products.find(p => p.name === productName);
-    cart[productName] = { qty: 0, price: product.price };
-  }
-  cart[productName].qty += qty;
-  updateStatusUnified(productName);
-  updateCartDisplayUnified();
-  updateCartCount();
-}
+      const qty = parseInt(document.getElementById(`select-${productName}`).value);
+      if (!cart[productName]) {
+        const product = products.find(p => p.name === productName);
+        cart[productName] = { qty: 0, price: product.price };
+      }
+      cart[productName].qty += qty;
+      updateStatus(productName);
+      updateCartDisplay();
+      updateCartCount();
+    }
 
     function removeFromCart(productName) {
       const qty = parseInt(document.getElementById(`select-${productName}`).value);
@@ -919,13 +919,17 @@ function addToCart1(productName) {
   const grams = parseFloat(document.getElementById(`select-${productName}`).value);
   const product = products.find(p => p.name === productName);
   if (!product) return;
+
+  const units = grams / 100; // convert to number of 100g units
+
   if (!cart[productName]) {
     cart[productName] = { grams: 0, price: product.price };
   }
   cart[productName].grams += grams;
-  updateStatusUnified(productName);
-  updateCartDisplayUnified();
-  updateCartCount();
+
+  updateStatus1(productName);
+  updateCartDisplay1();
+  updateCartCount1();
 }
 
 function removeFromCart1(productName) {
@@ -1245,19 +1249,6 @@ function adjustCartItemUnified(productName, adjustment) {
   // updateStatus(productName); // If you have a status display per product
   updateCartDisplayUnified();
   // updateCartCount(); // If you have a cart count display
-}
-  function updateStatusUnified(productName) {
-  const status = document.getElementById(`status-${productName}`);
-  if (!cart[productName]) {
-    status.textContent = "";
-    return;
-  }
-  const cartItem = cart[productName];
-  if cartItem.qty !== undefined) {
-    status.textContent = `In cart: ${cartItem.qty} Pack${cartItem.qty > 1 ? 's' : ''}`;
-  } else if (cartItem.grams !== undefined) {
-    status.textContent = `In cart: ${cartItem.grams >= 1000 ? (cartItem.grams / 1000).toFixed(2) + ' kg' : cartItem.grams + ' g'}`;
-  }
 }
   </script>
 </body>
