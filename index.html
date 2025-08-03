@@ -329,6 +329,17 @@
         width: 100%;
       }
     }
+    @media (min-width: 500px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr); /* force 2 columns for anything wider than 500px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr); /* show 4 columns only on larger screens */
+  }
+}
     .whatsapp-float {
       position: fixed;
       bottom: 20px;
