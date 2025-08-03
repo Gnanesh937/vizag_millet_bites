@@ -691,28 +691,70 @@
     const weights = [100, 250, 500, 1 , 5 ];
     const cart = {};
 
-    function renderProducts() {
-      const grid = document.getElementById("product-grid");
-      products.forEach(product => {
-        const div = document.createElement("div");
-        div.className = "product-card";
-        div.innerHTML = `
-          <div class="discount-badge">20% OFF</div>
-          <img src="${product.image}" alt="${product.name}" />
-          <h4>${product.name}</h4>
-          <p>₹${product.price} - 100g</p>
-          <div class="quantity-controls">
-            <button onclick="removeFromCart('${product.name}')">-</button>
-            <select id="select-${product.name}">
-              ${weights.map(w => `<option value="${w}">${w}KG</option>`).join('')}
-            </select>
-            <button onclick="addToCart('${product.name}')">+</button>
-          </div>
-          <div class="cart-status" id="status-${product.name}"></div>
-        `;
-        grid.appendChild(div);
-      });
-    }
+function renderProducts() {
+  const grid = document.getElementById("product-grid");
+  grid.innerHTML = ''; // clear existing content
+
+  // Render Combos First
+  const comboHeader = document.createElement('h3');
+  comboHeader.textContent = 'Combo Packs';
+  comboHeader.style.color = '#2e7d32';
+  comboHeader.style.marginBottom = '10px';
+  grid.appendChild(comboHeader);
+
+  products
+    .filter(product => product.name.toLowerCase().includes("combo"))
+    .forEach(product => {
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <div class="discount-badge">20% OFF</div>
+        <img src="${product.image}" alt="${product.name}" />
+        <h4>${product.name}</h4>
+        <p>₹${product.price} / pack</p>
+        <div class="quantity-controls">
+          <button onclick="removeFromCart('${product.name}', 'pack')">-</button>
+          <select id="select-${product.name}">
+            ${[1, 2, 3, 5].map(p => `<option value="${p}">${p} Pack${p > 1 ? 's' : ''}</option>`).join('')}
+          </select>
+          <button onclick="addToCart('${product.name}', 'pack')">+</button>
+        </div>
+        <div class="cart-status" id="status-${product.name}"></div>
+      `;
+      grid.appendChild(div);
+    });
+
+  // Render Regular Items Next
+  const regularHeader = document.createElement('h3');
+  regularHeader.textContent = 'Regular Items';
+  regularHeader.style.color = '#2e7d32';
+  regularHeader.style.margin = '40px 0 10px';
+  grid.appendChild(regularHeader);
+
+  products
+    .filter(product => !product.name.toLowerCase().includes("combo"))
+    .forEach(product => {
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <div class="discount-badge">20% OFF</div>
+        <img src="${product.image}" alt="${product.name}" />
+        <h4>${product.name}</h4>
+        <p>₹${product.price} / 100g</p>
+        <div class="quantity-controls">
+          <button onclick="removeFromCart('${product.name}', 'kg')">-</button>
+          <select id="select-${product.name}">
+            ${[100, 250, 500, 1000, 2000, 5000].map(w => {
+              return `<option value="${w}">${w >= 1000 ? w / 1000 + "KG" : w + "g"}</option>`;
+            }).join('')}
+          </select>
+          <button onclick="addToCart('${product.name}', 'kg')">+</button>
+        </div>
+        <div class="cart-status" id="status-${product.name}"></div>
+      `;
+      grid.appendChild(div);
+    });
+}
 
     function addToCart(productName) {
       const qty = parseFloat(document.getElementById(`select-${productName}`).value);
