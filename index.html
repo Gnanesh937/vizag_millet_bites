@@ -749,9 +749,9 @@ function renderProducts() {
         cart[productName] = { qty: 0, price: product.price };
       }
       cart[productName].qty += qty;
-      updateStatus(productName);
-      updateCartDisplay();
-      updateCartCount();
+      updateStatus1(productName);
+      updateCartDisplay1();
+      updateCartCount1();
     }
       function addToCart(productName) {
       const qty = parseFloat(document.getElementById(`select-${productName}`).value);
