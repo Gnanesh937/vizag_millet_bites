@@ -932,9 +932,9 @@ function renderProducts() {
           <div class="cart-item">
             <div class="cart-item-name">${item}</div>
             <div class="cart-item-qty">
-              <button onclick="adjustCartItem('${item}', -0.10)">-</button>
+              <button onclick="adjustCartItem1('${item}', -0.10)">-</button>
               ${cart[item].qty.toFixed(2)} kg
-              <button onclick="adjustCartItem('${item}', 0.10)">+</button>
+              <button onclick="adjustCartItem1('${item}', 0.10)">+</button>
             </div>
             <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
           </div>
