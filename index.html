@@ -682,7 +682,7 @@
       { name: "Hot Gavvalu", image: "Hot Gavvalu.jpeg", price: 160 }
     ];
 
-    const weights = [0.10, 0.25, 0.5, 1, 5];
+    const weights = [100, 250, 500, 1 K, 5 K];
     const cart = {};
 
     function renderProducts() {
@@ -694,11 +694,11 @@
           <div class="discount-badge">20% OFF</div>
           <img src="${product.image}" alt="${product.name}" />
           <h4>${product.name}</h4>
-          <p>₹${product.price} / 250g</p>
+          <p>₹${product.price} - 100g</p>
           <div class="quantity-controls">
             <button onclick="removeFromCart('${product.name}')">-</button>
             <select id="select-${product.name}">
-              ${weights.map(w => `<option value="${w}">${w} KG</option>`).join('')}
+              ${weights.map(w => `<option value="${w}">${w}G</option>`).join('')}
             </select>
             <button onclick="addToCart('${product.name}')">+</button>
           </div>
