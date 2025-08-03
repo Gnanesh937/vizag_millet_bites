@@ -1039,7 +1039,7 @@ function adjustCartItem1(productName, gramAdjustment) {
   const product = products3.find(p => p.name === productName);
   if (!product) return;
 
-  const units = grams / 100; // convert to number of 100g units
+  const units = grams - 250; // convert to number of 100g units
 
   if (!cart[productName]) {
     cart[productName] = { grams: 0, price: product.price };
