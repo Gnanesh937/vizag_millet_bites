@@ -698,7 +698,7 @@
           <div class="quantity-controls">
             <button onclick="removeFromCart('${product.name}')">-</button>
             <select id="select-${product.name}">
-              ${weights.map(w => `<option value="${w}">${w} KG</option>`).join('')}
+              ${weights.map(w => `<option value="${w}">${w} G</option>`).join('')}
             </select>
             <button onclick="addToCart('${product.name}')">+</button>
           </div>
