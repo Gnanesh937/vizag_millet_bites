@@ -695,13 +695,6 @@ function renderProducts() {
   const grid = document.getElementById("product-grid");
   grid.innerHTML = ''; // clear existing content
 
-  // Render Combos First
-  const comboHeader = document.createElement('h3');
-  comboHeader.textContent = 'Combo Packs';
-  comboHeader.style.color = '#2e7d32';
-  comboHeader.style.marginBottom = '10px';
-  grid.appendChild(comboHeader);
-
   products
     .filter(product => product.name.toLowerCase().includes("combo"))
     .forEach(product => {
@@ -723,13 +716,6 @@ function renderProducts() {
       `;
       grid.appendChild(div);
     });
-
-  // Render Regular Items Next
-  const regularHeader = document.createElement('h3');
-  regularHeader.textContent = 'Regular Items';
-  regularHeader.style.color = '#2e7d32';
-  regularHeader.style.margin = '40px 0 10px';
-  grid.appendChild(regularHeader);
 
   products
     .filter(product => !product.name.toLowerCase().includes("combo"))
