@@ -1180,7 +1180,76 @@ function adjustCartItem3(productName, gramAdjustment) {
       // Order button
       document.querySelector(".order").addEventListener("click", sendOrder);
     });
+    function updateCartDisplayUnified() {
+  const cartItemsContainer = document.getElementById("panel-cart-items");
+  let total = 0;
 
+  if (Object.keys(cart).length === 0) {
+    cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
+    return;
+  }
+
+  let cartItemsHTML = '';
+  for (const item in cart) {
+    const cartItem = cart[item];
+    let itemTotal = 0;
+    let qtyControls = "";
+
+    if (cartItem.qty !== undefined) {
+      // Combo pack
+      itemTotal = cartItem.qty * cartItem.price;
+      qtyControls = `
+        <button onclick="adjustCartItemUnified('${item}', -1)">-</button>
+        ${cartItem.qty} Pack
+        <button onclick="adjustCartItemUnified('${item}', 1)">+</button>
+      `;
+    } else if (cartItem.grams !== undefined) {
+      // By weight
+      itemTotal = (cartItem.grams / 100) * cartItem.price;
+      qtyControls = `
+        <button onclick="adjustCartItemUnified('${item}', -100)">-</button>
+        ${cartItem.grams >= 1000 ? (cartItem.grams / 1000).toFixed(2) + ' kg' : cartItem.grams + ' g'}
+        <button onclick="adjustCartItemUnified('${item}', 100)">+</button>
+      `;
+    }
+
+    total += itemTotal;
+
+    cartItemsHTML += `
+      <div class="cart-item">
+        <div class="cart-item-name">${item}</div>
+        <div class="cart-item-qty">${qtyControls}</div>
+        <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
+      </div>
+    `;
+  }
+
+  cartItemsContainer.innerHTML = cartItemsHTML;
+  document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
+}
+
+// Unified adjust function
+function adjustCartItemUnified(productName, adjustment) {
+  if (!cart[productName]) return;
+
+  if (cart[productName].qty !== undefined) {
+    cart[productName].qty += adjustment;
+    if (cart[productName].qty <= 0) {
+      delete cart[productName];
+    }
+  } else if (cart[productName].grams !== undefined) {
+    cart[productName].grams += adjustment;
+    if (cart[productName].grams <= 0) {
+      delete cart[productName];
+    }
+  }
+
+  // Update status if needed
+  // updateStatus(productName); // If you have a status display per product
+  updateCartDisplayUnified();
+  // updateCartCount(); // If you have a cart count display
+}
   </script>
 </body>
 </html>
