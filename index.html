@@ -1235,20 +1235,33 @@ function adjustCartItemUnified(productName, adjustment) {
 
   if (cart[productName].qty !== undefined) {
     cart[productName].qty += adjustment;
-    if (cart[productName].qty <= 0) {
+    if (cart[productName].qty < 1) {
       delete cart[productName];
     }
   } else if (cart[productName].grams !== undefined) {
     cart[productName].grams += adjustment;
-    if (cart[productName].grams <= 0) {
+    if (cart[productName].grams < 1) {
       delete cart[productName];
     }
   }
 
-  // Update status if needed
-  // updateStatus(productName); // If you have a status display per product
+  updateStatusUnified(productName);
   updateCartDisplayUnified();
-  // updateCartCount(); // If you have a cart count display
+  updateCartCount();
+}
+
+function updateStatusUnified(productName) {
+  const status = document.getElementById(`status-${productName}`);
+  if (!cart[productName]) {
+    status.textContent = "";
+    return;
+  }
+  const cartItem = cart[productName];
+  if (cartItem.qty !== undefined) {
+    status.textContent = `In cart: ${cartItem.qty} Pack${cartItem.qty > 1 ? 's' : ''}`;
+  } else if (cartItem.grams !== undefined) {
+    status.textContent = `In cart: ${cartItem.grams >= 1000 ? (cartItem.grams / 1000).toFixed(2) + ' kg' : cartItem.grams + ' g'}`;
+  }
 }
   </script>
 </body>
