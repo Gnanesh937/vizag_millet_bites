@@ -685,59 +685,98 @@
     const weights = [100, 250, 500, 1 , 5 ];
     const cart = {};
 
-    function renderProducts() {
-      const grid = document.getElementById("product-grid");
-      products.forEach(product => {
-        const div = document.createElement("div");
-        div.className = "product-card";
-        div.innerHTML = `
-          <div class="discount-badge">20% OFF</div>
-          <img src="${product.image}" alt="${product.name}" />
-          <h4>${product.name}</h4>
-          <p>₹${product.price} - 100g</p>
-          <div class="quantity-controls">
-            <button onclick="removeFromCart('${product.name}')">-</button>
-            <select id="select-${product.name}">
-              ${weights.map(w => `<option value="${w}">${w}KG</option>`).join('')}
-            </select>
-            <button onclick="addToCart('${product.name}')">+</button>
-          </div>
-          <div class="cart-status" id="status-${product.name}"></div>
-        `;
-        grid.appendChild(div);
-      });
-    }
+function renderProducts() {
+  const grid = document.getElementById("product-grid");
+  grid.innerHTML = `
+    <div>
+      <h3 style="color:#2e7d32;">Combo Packs</h3>
+      <div class="product-grid" id="combo-grid"></div>
+    </div>
+    <div>
+      <h3 style="color:#2e7d32;">Regular Items</h3>
+      <div class="product-grid" id="regular-grid"></div>
+    </div>
+  `;
 
-    function addToCart(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
-      if (!cart[productName]) {
-        const product = products.find(p => p.name === productName);
-        cart[productName] = { qty: 0, price: product.price };
-      }
-      cart[productName].qty += qty;
-      updateStatus(productName);
-      updateCartDisplay();
-      updateCartCount();
-    }
+  const comboGrid = document.getElementById("combo-grid");
+  const regularGrid = document.getElementById("regular-grid");
 
-    function removeFromCart(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
-      if (!cart[productName]) return;
-      cart[productName].qty -= qty;
-      if (cart[productName].qty <= 0) delete cart[productName];
-      updateStatus(productName);
-      updateCartDisplay();
-      updateCartCount();
-    }
+  products.forEach(product => {
+    const isCombo = product.name.toLowerCase().includes("combo");
+    const div = document.createElement("div");
+    div.className = "product-card";
 
-    function updateStatus(productName) {
-      const status = document.getElementById(`status-${productName}`);
-      if (cart[productName]) {
-        status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} kg`;
-      } else {
-        status.textContent = "";
-      }
+    if (isCombo) {
+      div.innerHTML = `
+        <div class="discount-badge">20% OFF</div>
+        <img src="${product.image}" alt="${product.name}" />
+        <h4>${product.name}</h4>
+        <p>₹${product.price} / pack</p>
+        <div class="quantity-controls">
+          <button onclick="removeFromCart('${product.name}', 'pack')">-</button>
+          <select id="select-${product.name}">
+            ${[1, 2, 3, 5].map(p => `<option value="${p}">${p} Pack${p > 1 ? 's' : ''}</option>`).join('')}
+          </select>
+          <button onclick="addToCart('${product.name}', 'pack')">+</button>
+        </div>
+        <div class="cart-status" id="status-${product.name}"></div>
+      `;
+      comboGrid.appendChild(div);
+    } else {
+      div.innerHTML = `
+        <div class="discount-badge">20% OFF</div>
+        <img src="${product.image}" alt="${product.name}" />
+        <h4>${product.name}</h4>
+        <p>₹${product.price} / 100g</p>
+        <div class="quantity-controls">
+          <button onclick="removeFromCart('${product.name}', 'kg')">-</button>
+          <select id="select-${product.name}">
+            ${[100, 250, 500, 1000, 2000, 5000].map(w => {
+              return `<option value="${w}">${w >= 1000 ? w / 1000 + "KG" : w + "g"}</option>`;
+            }).join('')}
+          </select>
+          <button onclick="addToCart('${product.name}', 'kg')">+</button>
+        </div>
+        <div class="cart-status" id="status-${product.name}"></div>
+      `;
+      regularGrid.appendChild(div);
     }
+  });
+}
+
+function addToCart(productName, unitType) {
+  const select = document.getElementById(`select-${productName}`);
+  const qty = parseFloat(select.value);
+  if (!cart[productName]) {
+    const product = products.find(p => p.name === productName);
+    cart[productName] = { qty: 0, price: product.price, unit: unitType };
+  }
+  cart[productName].qty += qty;
+  updateStatus(productName);
+  updateCartDisplay();
+  updateCartCount();
+}
+
+function removeFromCart(productName, unitType) {
+  const select = document.getElementById(`select-${productName}`);
+  const qty = parseFloat(select.value);
+  if (!cart[productName]) return;
+  cart[productName].qty -= qty;
+  if (cart[productName].qty <= 0) delete cart[productName];
+  updateStatus(productName);
+  updateCartDisplay();
+  updateCartCount();
+}
+
+function updateStatus(productName) {
+  const status = document.getElementById(`status-${productName}`);
+  if (cart[productName]) {
+    const unitLabel = cart[productName].unit === "pack" ? "pack(s)" : "kg";
+    status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} ${unitLabel}`;
+  } else {
+    status.textContent = "";
+  }
+}
 
     function updateCartCount() {
       const count = Object.keys(cart).length;
@@ -746,52 +785,63 @@
       if (cartCount2) cartCount2.textContent = count;
     }
 
-    function updateCartDisplay() {
-      const cartItemsContainer = document.getElementById("panel-cart-items");
-      let total = 0;
-      
-      if (Object.keys(cart).length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-        document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
-        return;
-      }
-      
-      let cartItemsHTML = '';
-      for (const item in cart) {
-        // product.price is per 250g, so per kg multiply by 4
-        const itemTotal = cart[item].qty * cart[item].price * 4;
-        total += itemTotal;
-        
-        cartItemsHTML += `
-          <div class="cart-item">
-            <div class="cart-item-name">${item}</div>
-            <div class="cart-item-qty">
-              <button onclick="adjustCartItem('${item}', -0.25)">-</button>
-              ${cart[item].qty.toFixed(2)} kg
-              <button onclick="adjustCartItem('${item}', 0.25)">+</button>
-            </div>
-            <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
-          </div>
-        `;
-      }
-      
-      cartItemsContainer.innerHTML = cartItemsHTML;
-      document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
+function updateCartDisplay() {
+  const cartItemsContainer = document.getElementById("panel-cart-items");
+  let total = 0;
+
+  if (Object.keys(cart).length === 0) {
+    cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
+    return;
+  }
+
+  let cartItemsHTML = '';
+  for (const item in cart) {
+    const unit = cart[item].unit;
+    let itemTotal;
+
+    if (unit === "pack") {
+      itemTotal = cart[item].qty * cart[item].price;
+    } else {
+      itemTotal = (cart[item].qty * cart[item].price) / 0.25; // ₹150 per 100g = ₹600 per kg => divide by 0.25
     }
 
-    function adjustCartItem(productName, adjustment) {
-      if (!cart[productName]) return;
-      
-      cart[productName].qty += adjustment;
-      
-      if (cart[productName].qty <= 0) {
-        delete cart[productName];
-      }
-      
-      updateStatus(productName);
-      updateCartDisplay();
-      updateCartCount();
-    }
+    total += itemTotal;
+
+    cartItemsHTML += `
+      <div class="cart-item">
+        <div class="cart-item-name">${item}</div>
+        <div class="cart-item-qty">
+          <button onclick="adjustCartItem('${item}', -0.25)">-</button>
+          ${cart[item].qty.toFixed(2)} ${unit === "pack" ? "pack(s)" : "kg"}
+          <button onclick="adjustCartItem('${item}', 0.25)">+</button>
+        </div>
+        <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
+      </div>
+    `;
+  }
+
+  cartItemsContainer.innerHTML = cartItemsHTML;
+  document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
+}
+
+function adjustCartItem(productName, adjustment) {
+  if (!cart[productName]) return;
+
+  if (cart[productName].unit === "pack") {
+    cart[productName].qty += adjustment > 0 ? 1 : -1;
+  } else {
+    cart[productName].qty += adjustment;
+  }
+
+  if (cart[productName].qty <= 0) {
+    delete cart[productName];
+  }
+
+  updateStatus(productName);
+  updateCartDisplay();
+  updateCartCount();
+}
 
     function toggleCartPanel() {
       document.getElementById("cartPanel").classList.toggle("active");
