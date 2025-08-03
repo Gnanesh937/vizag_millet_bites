@@ -695,9 +695,6 @@ function renderProducts() {
   const grid = document.getElementById("product-grid");
   grid.innerHTML = ''; // clear existing content
 
-  // Render Combos First
-  grid.appendChild(comboHeader);
-
   products
     .filter(product => product.name.toLowerCase().includes("combo"))
     .forEach(product => {
@@ -719,9 +716,6 @@ function renderProducts() {
       `;
       grid.appendChild(div);
     });
-
-  // Render Regular Items Next
-  grid.appendChild(regularHeader);
 
   products
     .filter(product => !product.name.toLowerCase().includes("combo"))
