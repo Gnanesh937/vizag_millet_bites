@@ -750,7 +750,7 @@ function renderProducts() {
 }
 
       function addToCart(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
+      const qty = parseInt(document.getElementById(`select-${productName}`).value);
       if (!cart[productName]) {
         const product = products.find(p => p.name === productName);
         cart[productName] = { qty: 0, price: product.price };
@@ -762,7 +762,7 @@ function renderProducts() {
     }
 
     function removeFromCart(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
+      const qty = parseInt(document.getElementById(`select-${productName}`).value);
       if (!cart[productName]) return;
       cart[productName].qty -= qty;
       if (cart[productName].qty <= 0) delete cart[productName];
