@@ -900,7 +900,7 @@ function renderProducts() {
     function updateStatus1(productName) {
       const status = document.getElementById(`status-${productName}`);
       if (cart[productName]) {
-        status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} pack`;
+        status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} Kg`;
       } else {
         status.textContent = "";
       }
