@@ -742,17 +742,6 @@ function renderProducts() {
     });
 }
 
-    function addToCart1(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
-      if (!cart[productName]) {
-        const product = products.find(p => p.name === productName);
-        cart[productName] = { qty: 0, price: product.price };
-      }
-      cart[productName].qty += qty;
-      updateStatus1(productName);
-      updateCartDisplay1();
-      updateCartCount1();
-    }
       function addToCart(productName) {
       const qty = parseFloat(document.getElementById(`select-${productName}`).value);
       if (!cart[productName]) {
@@ -765,17 +754,7 @@ function renderProducts() {
       updateCartCount();
     }
 
-
-    function removeFromCart1(productName) {
-      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
-      if (!cart[productName]) return;
-      cart[productName].qty -= qty;
-      if (cart[productName].qty <= 0) delete cart[productName];
-      updateStatus1(productName);
-      updateCartDisplay1();
-      updateCartCount1();
-    }
-      function removeFromCart(productName) {
+    function removeFromCart(productName) {
       const qty = parseFloat(document.getElementById(`select-${productName}`).value);
       if (!cart[productName]) return;
       cart[productName].qty -= qty;
@@ -784,16 +763,7 @@ function renderProducts() {
       updateCartDisplay();
       updateCartCount();
     }
-
-    function updateStatus1(productName) {
-      const status = document.getElementById(`status-${productName}`);
-      if (cart[productName]) {
-        status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} pack`;
-      } else {
-        status.textContent = "";
-      }
-    }
-    function updateStatus(productName) {
+  function updateStatus(productName) {
       const status = document.getElementById(`status-${productName}`);
       if (cart[productName]) {
         status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} Pack`;
@@ -841,61 +811,7 @@ function renderProducts() {
       cartItemsContainer.innerHTML = cartItemsHTML;
       document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
     }
-      function updateCartCount1() {
-      const count = Object.keys(cart).length;
-      document.getElementById("cartCount").textContent = count;
-      const cartCount2 = document.getElementById("cartCount2");
-      if (cartCount2) cartCount2.textContent = count;
-    }
-
-    function updateCartDisplay1() {
-      const cartItemsContainer = document.getElementById("panel-cart-items");
-      let total = 0;
-      
-      if (Object.keys(cart).length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-        document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
-        return;
-      }
-      
-      let cartItemsHTML = '';
-      for (const item in cart) {
-        // product.price is per 250g, so per kg multiply by 4
-        const itemTotal = cart[item].qty * cart[item].price * 1;
-        total += itemTotal;
-        
-        cartItemsHTML += `
-          <div class="cart-item">
-            <div class="cart-item-name">${item}</div>
-            <div class="cart-item-qty">
-              <button onclick="adjustCartItem('${item}', -1)">-</button>
-              ${cart[item].qty.toFixed(2)} kg
-              <button onclick="adjustCartItem('${item}', 1)">+</button>
-            </div>
-            <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
-          </div>
-        `;
-      }
-      
-      cartItemsContainer.innerHTML = cartItemsHTML;
-      document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
-    }
-
-    function adjustCartItem(productName, adjustment) {
-      if (!cart[productName]) return;
-      
-      cart[productName].qty += adjustment;
-      
-      if (cart[productName].qty <= 0) {
-        delete cart[productName];
-      }
-      
-      updateStatus(productName);
-      updateCartDisplay();
-      updateCartCount();
-    }
-
-    function toggleCartPanel() {
+      function toggleCartPanel() {
       document.getElementById("cartPanel").classList.toggle("active");
       document.getElementById("overlay").classList.toggle("active");
     }
@@ -945,6 +861,89 @@ function renderProducts() {
       document.querySelector(".order").addEventListener("click", sendOrder);
     });
 
+      function adjustCartItem(productName, adjustment) {
+      if (!cart[productName]) return;
+      
+      cart[productName].qty += adjustment;
+      
+      if (cart[productName].qty <= 0) {
+        delete cart[productName];
+      }
+      
+      updateStatus(productName);
+      updateCartDisplay();
+      updateCartCount();
+    }
+
+      function addToCart1(productName) {
+      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
+      if (!cart[productName]) {
+        const product = products.find(p => p.name === productName);
+        cart[productName] = { qty: 0, price: product.price };
+      }
+      cart[productName].qty += qty;
+      updateStatus1(productName);
+      updateCartDisplay1();
+      updateCartCount1();
+    }
+
+    function removeFromCart1(productName) {
+      const qty = parseFloat(document.getElementById(`select-${productName}`).value);
+      if (!cart[productName]) return;
+      cart[productName].qty -= qty;
+      if (cart[productName].qty <= 0) delete cart[productName];
+      updateStatus1(productName);
+      updateCartDisplay1();
+      updateCartCount1();
+    }
+
+    function updateStatus1(productName) {
+      const status = document.getElementById(`status-${productName}`);
+      if (cart[productName]) {
+        status.textContent = `In cart: ${cart[productName].qty.toFixed(2)} pack`;
+      } else {
+        status.textContent = "";
+      }
+    }
+      function updateCartCount1() {
+      const count = Object.keys(cart).length;
+      document.getElementById("cartCount").textContent = count;
+      const cartCount2 = document.getElementById("cartCount2");
+      if (cartCount2) cartCount2.textContent = count;
+    }
+
+    function updateCartDisplay1() {
+      const cartItemsContainer = document.getElementById("panel-cart-items");
+      let total = 0;
+      
+      if (Object.keys(cart).length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+        document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
+        return;
+      }
+      
+      let cartItemsHTML = '';
+      for (const item in cart) {
+        // product.price is per 250g, so per kg multiply by 4
+        const itemTotal = cart[item].qty * cart[item].price * 1;
+        total += itemTotal;
+        
+        cartItemsHTML += `
+          <div class="cart-item">
+            <div class="cart-item-name">${item}</div>
+            <div class="cart-item-qty">
+              <button onclick="adjustCartItem('${item}', -1)">-</button>
+              ${cart[item].qty.toFixed(2)} kg
+              <button onclick="adjustCartItem('${item}', 1)">+</button>
+            </div>
+            <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
+          </div>
+        `;
+      }
+      
+      cartItemsContainer.innerHTML = cartItemsHTML;
+      document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
+    }
   
     function adjustCartItem1(productName, adjustment) {
       if (!cart[productName]) return;
