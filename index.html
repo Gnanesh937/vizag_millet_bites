@@ -975,24 +975,26 @@ function updateCartDisplay1() {
 
   let cartItemsHTML = '';
   for (const item in cart) {
-    const product = products.find(p => p.name === item);
-    if (!product) continue;
+    // CHANGE THIS BLOCK:
+    const cartItem = cart[item];
+    let itemTotal = 0;
+    let displayQty = "";
 
-    const grams = cart[item].grams;
-    const pricePer100g = cart[item].price;
-    const itemTotal = (grams / 100) * pricePer100g;
+    if (cartItem.qty !== undefined) {
+      // Combo pack
+      itemTotal = cartItem.qty * cartItem.price;
+      displayQty = `${cartItem.qty} Pack`;
+    } else if (cartItem.grams !== undefined) {
+      // By weight
+      itemTotal = (cartItem.grams / 100) * cartItem.price;
+      displayQty = cartItem.grams >= 1000 ? `${(cartItem.grams / 1000).toFixed(2)} kg` : `${cartItem.grams} g`;
+    }
 
     total += itemTotal;
 
     cartItemsHTML += `
-      <div class="cart-item">
-        <div class="cart-item-name">${item}</div>
-        <div class="cart-item-qty">
-          <button onclick="adjustCartItem1('${item}', -100)">-</button>
-          ${grams >= 1000 ? (grams / 1000).toFixed(2) + ' kg' : grams + ' g'}
-          <button onclick="adjustCartItem1('${item}', 100)">+</button>
-        </div>
-        <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
+      <div>
+        ${item}: ${displayQty} - ₹${itemTotal.toFixed(2)}
       </div>
     `;
   }
@@ -1039,7 +1041,7 @@ function adjustCartItem1(productName, gramAdjustment) {
   const product = products3.find(p => p.name === productName);
   if (!product) return;
 
-  const units = grams - 250; // convert to number of 100g units
+  const units = grams / 100; // convert to number of 100g units
 
   if (!cart[productName]) {
     cart[productName] = { grams: 0, price: product.price };
