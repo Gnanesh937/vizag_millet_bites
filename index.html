@@ -704,7 +704,7 @@ function renderProducts() {
         <div class="discount-badge">20% OFF</div>
         <img src="${product.image}" alt="${product.name}" />
         <h4>${product.name}</h4>
-        <p>₹${product.price} / pack</p>
+        <p>₹${product.price} - pack</p>
         <div class="quantity-controls">
           <button onclick="removeFromCart('${product.name}', 'pack')">-</button>
           <select id="select-${product.name}">
@@ -742,6 +742,36 @@ function renderProducts() {
               .join('')}
           </select>
           <button onclick="addToCart1('${product.name}', 'kg')">+</button>
+        </div>
+        <div class="cart-status" id="status-${product.name}"></div>
+      `;
+      grid.appendChild(div);
+    });
+  
+    products
+    .filter(product => !product.name.toLowerCase().includes("combo"))
+    .forEach(product => {
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <div class="discount-badge">20% OFF</div>
+        <img src="${product.image}" alt="${product.name}" />
+        <h4>${product.name}</h4>
+        <p>₹${product.price} - 100g</p>
+        <div class="quantity-controls">
+          <button onclick="removeFromCart3('${product.name}', 'kg')">-</button>
+          <select id="select-${product.name}">
+            ${[
+            { value: 250, label: "250g" },
+            { value: 500, label: "500g" },
+            { value: 1000, label: "1KG" },
+            { value: 2000, label: "2KG" },
+            { value: 5000, label: "5KG" }
+          ]
+              .map(opt => `<option value="${opt.value}">${opt.label}</option>`)
+              .join('')}
+          </select>
+          <button onclick="addToCart3('${product.name}', 'kg')">+</button>
         </div>
         <div class="cart-status" id="status-${product.name}"></div>
       `;
@@ -1000,6 +1030,126 @@ function adjustCartItem1(productName, gramAdjustment) {
       // Order button
       document.querySelector(".order").addEventListener("click", sendOrder);
     });
+
+  function addToCart3(productName) {
+  const grams = parseFloat(document.getElementById(`select-${productName}`).value);
+  const product = products.find(p => p.name === productName);
+  if (!product) return;
+
+  const units = grams / 100; // convert to number of 100g units
+
+  if (!cart[productName]) {
+    cart[productName] = { grams: 0, price: product.price };
+  }
+  cart[productName].grams += grams;
+
+  updateStatus3(productName);
+  updateCartDisplay3();
+  updateCartCount3();
+}
+
+function removeFromCart3(productName) {
+  const grams = parseFloat(document.getElementById(`select-${productName}`).value);
+  if (!cart[productName]) return;
+
+  cart[productName].grams -= grams;
+
+  if (cart[productName].grams <= 0) {
+    delete cart[productName];
+  }
+
+  updateStatus3(productName);
+  updateCartDisplay3();
+  updateCartCount3();
+}
+
+function updateStatus3(productName) {
+  const status = document.getElementById(`status-${productName}`);
+  if (cart[productName]) {
+    const grams = cart[productName].grams;
+    status.textContent = `In cart: ${grams >= 1000 ? (grams / 1000).toFixed(2) + ' kg' : grams + ' g'}`;
+  } else {
+    status.textContent = "";
+  }
+}
+      function updateCartCount3() {
+      const count = Object.keys(cart).length;
+      document.getElementById("cartCount").textContent = count;
+      const cartCount2 = document.getElementById("cartCount2");
+      if (cartCount2) cartCount2.textContent = count;
+    }
+
+function updateCartDisplay3() {
+  const cartItemsContainer = document.getElementById("panel-cart-items");
+  let total = 0;
+
+  if (Object.keys(cart).length === 0) {
+    cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    document.querySelector(".cart-summary p").textContent = `Total: ₹0.00`;
+    return;
+  }
+
+  let cartItemsHTML = '';
+  for (const item in cart) {
+    const product = products.find(p => p.name === item);
+    if (!product) continue;
+
+    const grams = cart[item].grams;
+    const pricePer100g = cart[item].price;
+    const itemTotal = (grams / 100) * pricePer100g;
+
+    total += itemTotal;
+
+    cartItemsHTML += `
+      <div class="cart-item">
+        <div class="cart-item-name">${item}</div>
+        <div class="cart-item-qty">
+          <button onclick="adjustCartItem3('${item}', -100)">-</button>
+          ${grams >= 1000 ? (grams / 1000).toFixed(2) + ' kg' : grams + ' g'}
+          <button onclick="adjustCartItem3('${item}', 100)">+</button>
+        </div>
+        <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
+      </div>
+    `;
+  }
+
+  cartItemsContainer.innerHTML = cartItemsHTML;
+  document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
+}
+  
+function adjustCartItem3(productName, gramAdjustment) {
+  if (!cart[productName]) return;
+
+  cart[productName].grams += gramAdjustment;
+
+  if (cart[productName].grams <= 0) {
+    delete cart[productName];
+  }
+
+  updateStatus3(productName);
+  updateCartDisplay3();
+  updateCartCount3();
+}
+
+    function toggleCartPanel3() {
+      document.getElementById("cartPanel").classList.toggle("active");
+      document.getElementById("overlay").classList.toggle("active");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showSlides3();
+      renderProducts3();
+      
+      // Cart panel toggle
+      document.getElementById("cartIcon").addEventListener("click", toggleCartPanel3);
+      document.getElementById("cartIcon2").addEventListener("click", toggleCartPanel3);
+      document.getElementById("closeCart").addEventListener("click", toggleCartPanel3);
+      document.getElementById("overlay").addEventListener("click", toggleCartPanel3);
+            
+      // Order button
+      document.querySelector(".order").addEventListener("click", sendOrder);
+    });
+
   </script>
 </body>
 </html>
