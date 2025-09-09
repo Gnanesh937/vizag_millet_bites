@@ -543,7 +543,7 @@
       </div>
     </div>
   </header>
-  <div class="scroll"><span>🎉 Special Offer: Get 10% OFF on all orders above ₹500! Limited time only! 🎉</span></div>
+  <div class="scroll"><span>🎉Healthy Rakhi, Happy Rakhi – Celebrate with Nutritious Millets!🎉</span></div>
 <section id="home" class="hero">
   <div class="slideshow-container">
     <a href="#menu">
@@ -614,7 +614,14 @@
   </footer>
   <a href="https://wa.me/919949840365" class="whatsapp-float" target="_blank">💬</a>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-JEC4W4NZ5E');
     let slideIndex = 1;
     let slideTimer;
 
@@ -665,10 +672,10 @@
     });
   
     const products = [
-      { name: "Combo 1", image: "b1.jpeg", price: 299, type: "combo" },
-      { name: "Combo 2", image: "b2.jpeg", price: 399, type: "combo" },
-      { name: "Combo 3", image: "b3.jpeg", price: 399, type: "combo" },
-      { name: "Combo 4", image: "b4.jpeg", price: 599, type: "combo" },
+      { name: "Combo Pack 1", image: "b1.jpeg", price: 999, type: "combo" },
+      { name: "Combo Pack 2", image: "b2.jpeg", price: 299, type: "combo" },
+      { name: "Combo Pack 3", image: "b3.jpeg", price: 399, type: "combo" },
+      { name: "Combo Pack 4", image: "b4.jpeg", price: 599, type: "combo" },
       { name: "Ragi Mixture", image: "Ragi Mixture.jpeg", price: 60, type: "weight" },
       { name: "Ragi Chegodilu", image: "Ragi Chegodilu.jpeg", price: 60, type: "weight" },
       { name: "Ragi Murukkulu", image: "Ragi Murukkulu.jpeg", price: 60, type: "weight" },
@@ -679,11 +686,11 @@
       { name: "Arikalu Jantikalu", image: "Arikalu Jantikalu.jpeg", price: 60, type: "weight" },
       { name: "Samalu Boondi", image: "Samalu Boondi.jpeg", price: 60, type: "weight" },
       { name: "Dry Fruit Mixture", image: "Dry Fruit Mixture.jpeg", price: 180, type: "weight" },
-      { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 300, type: "weight", minQty: 250 },
-      { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200, type: "weight", minQty: 250 },
-      { name: "Panchadara Gavvalu", image: "Panchadara Gavvalu.jpg", price: 100, type: "weight", minQty: 250 },
-      { name: "Bellam Gavvalu", image: "Bellam Gavvalu.jpeg", price: 100, type: "weight", minQty: 250 },
-      { name: "Hot Gavvalu", image: "Hot Gavvalu.jpeg", price: 100, type: "weight", minQty: 250 }
+      { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 300, type: "weight", minQty: 250, pricePer: 250 },
+      { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200, type: "weight", minQty: 250, pricePer: 250 },
+      { name: "Panchadara Gavvalu", image: "Panchadara Gavvalu.jpg", price: 100, type: "weight", minQty: 250, pricePer: 250 },
+      { name: "Bellam Gavvalu", image: "Bellam Gavvalu.jpeg", price: 100, type: "weight", minQty: 250, pricePer: 250 },
+      { name: "Hot Gavvalu", image: "Hot Gavvalu.jpeg", price: 100, type: "weight", minQty: 250, pricePer: 250 }
     ];
 
     const cart = {};
@@ -698,7 +705,7 @@
         
         if (product.type === "combo") {
           div.innerHTML = `
-            <div class="discount-badge">20% OFF</div>
+            <div class="discount-badge">Best Offer</div>
             <img src="${product.image}" alt="${product.name}" />
             <h4>${product.name}</h4>
             <p>₹${product.price} - pack</p>
@@ -833,8 +840,15 @@
             <button onclick="adjustCartItem('${productName}', 1)">+</button>
           `;
         } else {
-          // For weight-based items, price is per 100g
-          itemTotal = (item.quantity / 100) * item.product.price;
+          // For weight-based items, check if price is per 100g or per 250g
+          if (item.product.pricePer === 250) {
+            // Price is per 250g
+            itemTotal = (item.quantity / 250) * item.product.price;
+          } else {
+            // Default to price per 100g
+            itemTotal = (item.quantity / 100) * item.product.price;
+          }
+          
           qtyControls = `
             <button onclick="adjustCartItem('${productName}', -${item.product.minQty === 250 ? 250 : 100})">-</button>
             ${item.quantity >= 1000 ? (item.quantity/1000).toFixed(2) + ' kg' : item.quantity + ' g'}
@@ -900,7 +914,12 @@
         if (item.product.type === "combo") {
           total += item.quantity * item.product.price;
         } else {
-          total += (item.quantity / 100) * item.product.price;
+          // For weight-based items, check if price is per 100g or per 250g
+          if (item.product.pricePer === 250) {
+            total += (item.quantity / 250) * item.product.price;
+          } else {
+            total += (item.quantity / 100) * item.product.price;
+          }
         }
       }
       
