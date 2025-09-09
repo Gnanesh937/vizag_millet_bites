@@ -6,8 +6,8 @@
   <title>Millet Bites New Version</title>
   <style>
     html {
-  scroll-padding-top: 80px;
-}
+     scroll-padding-top: 80px;
+    }
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -48,6 +48,16 @@
     header h1 {
       margin: 0;
       font-size: 1.8rem;
+    }
+     header a {
+      color: white;
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    header a:hover {
+      color: #c8e6c9;
     }
     nav a {
       color: white;
@@ -349,11 +359,46 @@
       text-decoration: none;
     }
     footer {
-      text-align: center;
-      padding: 10px;
-      background-color: #eee;
-      margin-top: 40px;
+  background: linear-gradient(90deg, #006400, #228B22, #32CD32);
+  color: #ddd;
+  text-align: center;
+  padding: 15px 20px;
+  font-size: 14px;
+}
+.footer-container {
+  display: flex;       
+  gap: 50px;               
+  padding: 20px;
+  background-color: green; 
+  color: white;
+}
+
+.footer-column {
+  flex: 1;
+  text-align:left;      
+}
+
+.footer-column h2 {
+  color: #FFD700;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.footer-logo {
+  width: 130px;
+  height: 130px;
+}
+
+    footer a {
+      color: white;
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
     }
+    footer a:hover {
+      color: #c8e6c9;
+    }
+
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -531,10 +576,9 @@
   </div>
 
   <header>
-    <h1>Millet Bites</h1>
+    <a href="#home"><h1>Millet Bites</h1></a>
     <div class="header-right">
       <nav>
-        <a href="#home">Home</a>
         <a href="#menu">Menu</a>
         <a href="#about">About Us</a>
         <a href="#contact">Contact</a>
@@ -613,6 +657,31 @@
   </section>
 
   <footer>
+<div class="footer-container">
+<div class="footer-column">
+<img src="bites.png" alt="Millet Bites Logo" class="footer-logo" />
+<p>Experience delicious flavour with our healthy, tasty, and affordable millet-based snacks</p>
+</div>
+
+  <div class="footer-column">
+    <h2>Quick Links</h2>
+      <a href="#home">Home</a><br>
+      <a href="#about">About Us</a><br>
+      <a href="#menu">Menu</a><br>
+      <a href="#contact">Contact</a><br>
+      <a href="#reviews">Reviews</a><br>
+  </div>
+
+  <div class="footer-column">
+    <h2>Products</h2>
+      <a href="#menu">Combos</a><br>
+      <a href="#menu">Sweets</a><br>
+      <a href="#menu">Hots</a><br>
+      <a href="#menu">Dry Fruits</a><br>
+      <a href="#menu">Laddus</a><br>
+  </div>
+</div>
+
     &copy; 2025 Millet Bites. All rights reserved.
   </footer>
   <a href="https://wa.me/919949840365" class="whatsapp-float" target="_blank">💬</a>
