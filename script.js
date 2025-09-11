@@ -328,7 +328,7 @@ window.getCartTotal = function() {
   return total;
 };
 
-document.getElementById("payNowBtn").addEventListener("click", () => {
+document.getElementById("order").addEventListener("click", () => {
   if (cart.length === 0) {
     alert("Your cart is empty. Please add items before proceeding to checkout.");
   } else {
