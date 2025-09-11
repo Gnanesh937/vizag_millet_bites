@@ -1,46 +1,41 @@
-    document.getElementById("checkout-form").addEventListener("submit", function(e){
-      e.preventDefault();
+document.getElementById("checkout-form").addEventListener("submit", function(e){
+  e.preventDefault();
 
-        const { getCartTotal } = require('script.js');
-        
-      // Collect form data
-      var customer = {
-        name: document.getElementById("name").value,
-        phone: document.getElementById("phone").value,
-        email: document.getElementById("email").value,
-        door: document.getElementById("door").value,
-        street: document.getElementById("street").value,
-        area: document.getElementById("area").value,
-        nearby: document.getElementById("nearby").value,
-        city: document.getElementById("city").value,
-        state: document.getElementById("state").value,
-        pincode: document.getElementById("pincode").value
-      };
+  var customer = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    door: document.getElementById("door").value,
+    street: document.getElementById("street").value,
+    area: document.getElementById("area").value,
+    nearby: document.getElementById("nearby").value,
+    city: document.getElementById("city").value,
+    state: document.getElementById("state").value,
+    pincode: document.getElementById("pincode").value
+  };
 
-      // Razorpay options
-      var options = {
-          "key": "rzp_test_RGFvmNP1FiIT6V", // 🔑 Replace with your Razorpay Key ID
-          "amount": getCartTotal() * 100, // amount in paise (₹500 = 50000)
-          "currency": "INR",
-          "name": "My Store",
-          "description": "Product Purchase",
-          "image": "https://yourdomain.com/logo.png",
-          "handler": function (response){
-              alert("✅ Payment successful!\nPayment ID: " + response.razorpay_payment_id);
+  var options = {
+      "key": "rzp_test_RGFvmNP1FiIT6V",
+      "amount": getCartTotal() * 100, // ✅ dynamic cart total
+      "currency": "INR",
+      "name": "My Store",
+      "description": "Product Purchase",
+      "image": "https://yourdomain.com/logo.png",
+      "handler": function (response){
+          alert("✅ Payment successful!\nPayment ID: " + response.razorpay_payment_id);
+          console.log("Customer Details:", customer);
+          console.log("Cart:", cart);
+      },
+      "prefill": {
+          "name": customer.name,
+          "email": customer.email,
+          "contact": customer.phone
+      },
+      "theme": {
+          "color": "#3399cc"
+      }
+  };
 
-              // TODO: send customer details + payment_id to your backend
-              console.log("Customer Details:", customer);
-          },
-          "prefill": {
-              "name": customer.name,
-              "email": "customer@example.com", // You can add email input too if needed
-              "contact": customer.phone
-          },
-          "theme": {
-              "color": "#3399cc"
-          }
-      };
-
-      var rzp1 = new Razorpay(options);
-      rzp1.open();
-    });
+  var rzp1 = new Razorpay(options);
+  rzp1.open();
+});
