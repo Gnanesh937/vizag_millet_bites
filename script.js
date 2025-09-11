@@ -310,7 +310,7 @@ function renderProductsByCategory(category) {
       document.getElementById("overlay").classList.toggle("active");
     }
 
-function getCartTotal() {
+window.getCartTotal = function() {
   let total = 0;
   for (const productName in cart) {
     const item = cart[productName];
@@ -325,7 +325,7 @@ function getCartTotal() {
     }
   }
   return total;
-}
+};
 
     document.addEventListener("DOMContentLoaded", () => {
       renderCategories();
