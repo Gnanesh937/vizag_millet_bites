@@ -20,7 +20,7 @@
       // Razorpay options
       var options = {
           "key": "rzp_test_RGFvmNP1FiIT6V", // 🔑 Replace with your Razorpay Key ID
-          "amount": window.getCartTotal * 100, // convert ₹ to paise
+          "amount": window.getCartTotal() * 100, // convert ₹ to paise
           "currency": "INR",
           "name": "My Store",
           "description": "Product Purchase",
