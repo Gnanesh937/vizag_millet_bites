@@ -346,13 +346,4 @@ document.getElementById("order").addEventListener("click", () => {
       document.getElementById("closeCart").addEventListener("click", toggleCartPanel);
       document.getElementById("overlay").addEventListener("click", toggleCartPanel);
       
-      // Clear cart button
-      document.querySelector(".clear").addEventListener("click", () => {
-        for (const productName in cart) {
-          delete cart[productName];
-          updateStatus(productName);
-        }
-        updateCartDisplay();
-        updateCartCount();
-      });
-    });
+    
