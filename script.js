@@ -289,6 +289,7 @@ function renderProductsByCategory(category) {
       
       cartItemsContainer.innerHTML = cartItemsHTML;
       document.querySelector(".cart-summary p").textContent = `Total: ₹${total.toFixed(2)}`;
+      document.dispatchEvent(new Event("cartUpdated"));
     }
 
     function adjustCartItem(productName, adjustment) {
