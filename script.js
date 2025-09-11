@@ -329,7 +329,4 @@ function renderProductsByCategory(category) {
         updateCartDisplay();
         updateCartCount();
       });
-      
-      // Order button
-      document.querySelector(".order").addEventListener("click", sendOrder);
     });
