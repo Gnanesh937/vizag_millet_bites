@@ -1,6 +1,8 @@
     document.getElementById("checkout-form").addEventListener("submit", function(e){
       e.preventDefault();
 
+        const { getCartTotal } = require('./script.js');
+        
       // Collect form data
       var customer = {
         name: document.getElementById("name").value,
