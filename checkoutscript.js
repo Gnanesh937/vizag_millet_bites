@@ -30,8 +30,6 @@
 
               // TODO: send customer details + payment_id to your backend
               console.log("Customer Details:", customer);
-              console.log("Cart contents:", cart);
-              console.log("Cart total:", getCartTotal());
           },
           "prefill": {
               "name": customer.name,
