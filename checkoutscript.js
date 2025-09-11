@@ -18,7 +18,7 @@
       // Razorpay options
       var options = {
           "key": "rzp_test_RGFvmNP1FiIT6V", // 🔑 Replace with your Razorpay Key ID
-          "amount": 50000, // amount in paise (₹500 = 50000)
+          "amount": getCartTotal() * 100, // amount in paise (₹500 = 50000)
           "currency": "INR",
           "name": "My Store",
           "description": "Product Purchase",
