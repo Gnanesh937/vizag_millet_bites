@@ -2,7 +2,15 @@
 
     document.getElementById("checkout-form").addEventListener("submit", function(e){
       e.preventDefault();
-        
+
+        console.log("Cart total:", window.getCartTotal());
+
+        var amount = window.getCartTotal();
+         if(amount <= 0){
+          alert("Cart is empty. Add products before checkout!");
+          return;
+        }
+
       // Collect form data
       var customer = {
         name: document.getElementById("name").value,
@@ -20,7 +28,7 @@
       // Razorpay options
       var options = {
           "key": "rzp_test_RGFvmNP1FiIT6V", // 🔑 Replace with your Razorpay Key ID
-          "amount": window.getCartTotal() * 100, // convert ₹ to paise
+          "amount": amount * 100, // convert ₹ to paise
           "currency": "INR",
           "name": "My Store",
           "description": "Product Purchase",
