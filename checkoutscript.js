@@ -16,6 +16,26 @@
         state: document.getElementById("state").value,
         pincode: document.getElementById("pincode").value
       };
+        
+        const order = document.getElementById("order"); // Add this ID to your button
+
+function updatePayButton() {
+  const total = window.getCartTotal();
+  if (total <= 0) {
+    order.disabled = true;
+    order.textContent = "Cart is empty";
+  } else {
+    order.disabled = false;
+    order.textContent = "Pay Now";
+  }
+}
+
+// Run on page load
+updatePayButton();
+
+// Also update whenever cart changes
+document.addEventListener("cartUpdated", updatePayButton);
+
 
       // Razorpay options
       var options = {
