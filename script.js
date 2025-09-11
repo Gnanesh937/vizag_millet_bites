@@ -310,6 +310,23 @@ function renderProductsByCategory(category) {
       document.getElementById("overlay").classList.toggle("active");
     }
 
+function getCartTotal() {
+  let total = 0;
+  for (const productName in cart) {
+    const item = cart[productName];
+    if (item.product.type === "combo") {
+      total += item.quantity * item.product.price;
+    } else {
+      if (item.product.pricePer === 250) {
+        total += (item.quantity / 250) * item.product.price;
+      } else {
+        total += (item.quantity / 100) * item.product.price;
+      }
+    }
+  }
+  return total;
+}
+
     document.addEventListener("DOMContentLoaded", () => {
       renderCategories();
       renderProductsByCategory("all");
