@@ -96,7 +96,7 @@ document.getElementById("checkout-form").addEventListener("submit", function (e)
       };
 
       // ✅ Send data to Google Sheets
-      fetch("YOUR_GOOGLE_SCRIPT_URL_HERE", {
+      fetch("https://script.google.com/macros/s/AKfycbxcg5oJn2EapYcYdZ4s6wKVgdzjiz9I6sInU5AkJfVzOx2vDcozQekB_NjotpaGUYbY/exec", {
         method: "POST",
         body: JSON.stringify(orderData),
         headers: {
