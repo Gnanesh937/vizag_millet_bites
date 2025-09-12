@@ -1,45 +1,100 @@
-//checkoutscript.js
-    document.getElementById("checkout-form").addEventListener("submit", function(e){
-      e.preventDefault();
 
-      // Collect form data
-      var customer = {
-        name: document.getElementById("name").value,
-        phone: document.getElementById("phone").value,
-        email: document.getElementById("email").value,
-        door: document.getElementById("door").value,
-        street: document.getElementById("street").value,
-        area: document.getElementById("area").value,
-        nearby: document.getElementById("nearby").value,
-        city: document.getElementById("city").value,
-        state: document.getElementById("state").value,
-        pincode: document.getElementById("pincode").value
-      };
+// ✅ Get order details from localStorage
+var total = parseFloat(localStorage.getItem("orderTotal")) || 0;
+var orderCart = JSON.parse(localStorage.getItem("orderCart")) || {};
 
-      // Razorpay options
-      var options = {
-          "key": "rzp_test_RGFvmNP1FiIT6V", // 🔑 Replace with your Razorpay Key ID
-          "amount": window.getCartTotal() * 100, // convert ₹ to paise
-          "currency": "INR",
-          "name": "My Store",
-          "description": "Product Purchase",
-          "image": "https://yourdomain.com/logo.png",
-          "handler": function (response){
-              alert("✅ Payment successful!\nPayment ID: " + response.razorpay_payment_id);
+// ✅ Render order summary
+function renderOrderSummary() {
+  const orderItemsDiv = document.getElementById("order-items");
+  const orderTotalP = document.getElementById("order-total");
 
-              // TODO: send customer details + payment_id to your backend
-              console.log("Customer Details:", customer);
-          },
-          "prefill": {
-              "name": customer.name,
-              "email": "customer@example.com", // You can add email input too if needed
-              "contact": customer.phone
-          },
-          "theme": {
-              "color": "#3399cc"
-          }
-      };
+  if (Object.keys(orderCart).length === 0) {
+    orderItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+    orderTotalP.textContent = "Total: ₹0.00";
+    return;
+  }
 
-      var rzp1 = new Razorpay(options);
-      rzp1.open();
-    });
+  let html = "<ul>";
+  for (const productName in orderCart) {
+    const item = orderCart[productName];
+    let qtyText = item.product.type === "combo"
+      ? `${item.quantity} Pack${item.quantity > 1 ? "s" : ""}`
+      : item.quantity >= 1000
+        ? (item.quantity / 1000).toFixed(2) + " kg"
+        : item.quantity + " g";
+
+    html += `<li>${productName} - ${qtyText}</li>`;
+  }
+  html += "</ul>";
+
+  orderItemsDiv.innerHTML = html;
+  orderTotalP.textContent = `Total: ₹${total.toFixed(2)}`;
+}
+
+document.addEventListener("DOMContentLoaded", renderOrderSummary);
+
+// ✅ Handle payment
+document.getElementById("checkout-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  var customer = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    door: document.getElementById("door").value,
+    street: document.getElementById("street").value,
+    area: document.getElementById("area").value,
+    nearby: document.getElementById("nearby").value,
+    city: document.getElementById("city").value,
+    state: document.getElementById("state").value,
+    pincode: document.getElementById("pincode").value,
+  };
+
+  if (total <= 0) {
+    alert("Invalid total amount!");
+    return;
+  }
+
+  var options = {
+    key: "rzp_test_RGFvmNP1FiIT6V", // Replace with your Razorpay Key
+    amount: parseInt(total) * 100, // Convert to paise
+    currency: "INR",
+    name: "Millet Bites",
+    description: "Product Purchase",
+    handler: function (response) {
+      // ✅ Save success details in localStorage
+      localStorage.setItem("paymentSuccess", JSON.stringify({
+        customer: customer,
+        cart: orderCart,
+        total: total,
+        paymentId: response.razorpay_payment_id
+      }));
+
+      // ✅ Clear cart storage
+      localStorage.removeItem("orderTotal");
+      localStorage.removeItem("orderCart");
+
+      // Redirect to index.html
+      window.location.href = "index.html";
+    },
+    prefill: {
+      name: customer.name,
+      email: customer.email,
+      contact: customer.phone,
+    },
+    theme: {
+      color: "#3399cc",
+    },
+    modal: {
+      ondismiss: function () {
+        // ❌ Payment dismissed (failed/canceled)
+        localStorage.setItem("paymentFailure", "true");
+        window.location.href = "index.html";
+      }
+    }
+  };
+
+  var rzp1 = new Razorpay(options);
+
+  rzp1.open();
+});
