@@ -65,7 +65,7 @@ const products = [
 
   { name: "Dry Fruit Mixture", image: "Dry Fruit Mixture.jpeg", price: 180, type: "weight", category: "dryfruits" },
   { name: "Dry Fruit Laddu", image: "Dry Fruit Laddu.jpeg", price: 300, type: "weight", category: "sweets", minQty: 250, pricePer: 250 },
-  { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200, type: "weight", category: "dryfruits", minQty: 170, pricePer: 170 },
+  { name: "Cashew Bar", image: "Cashew Bar.jpeg", price: 200, type: "combo", category: "dryfruits", minQty:170 },
   { name: "Panchadara Gavvalu", image: "Panchadara Gavvalu.jpg", price: 100, type: "weight", category: "sweets", minQty: 250, pricePer: 250 },
   { name: "Bellam Gavvalu", image: "Bellam Gavvalu.jpeg", price: 100, type: "weight", category: "sweets", minQty: 250, pricePer: 250 },
   { name: "Hot Gavvalu", image: "Hot Gavvalu.jpeg", price: 100, type: "weight", category: "hots", minQty: 250, pricePer: 250 }
@@ -122,7 +122,7 @@ function renderProductsByCategory(category) {
         <div class="discount-badge">Best Offer</div>
         <img src="${product.image}" alt="${product.name}" />
         <h4>${product.name}</h4>
-        <p>₹${product.price} - pack</p>
+        <p>₹${product.price} -  ${product.minQty===170?'170g':'Pack'}</p>
         <div class="quantity-controls">
           <button onclick="removeFromCart('${product.name}')">-</button>
           <select id="select-${product.name}">
@@ -133,14 +133,7 @@ function renderProductsByCategory(category) {
         <div class="cart-status" id="status-${product.name}"></div>
       `;
     } else {
-      const quantityOptions = product.name === "Cashew Bar" 
-  ? [
-      { value: 170, label: "170g" },
-      { value: 250, label: "250g" },
-      { value: 500, label: "500g" },
-      { value: 1000, label: "1KG" }
-    ]
-      :product.minQty === 250 ? [
+      const quantityOptions = product.minQty === 250 ? [
         { value: 250, label: "250g" },
         { value: 500, label: "500g" },
         { value: 1000, label: "1KG" }
@@ -311,7 +304,14 @@ function renderProductsByCategory(category) {
       document.getElementById("overlay").classList.toggle("active");
     }
 
-window.getCartTotal = function() {
+
+function sendOrder() { 
+  if (Object.keys(cart).length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  // Calculate total
   let total = 0;
   for (const productName in cart) {
     const item = cart[productName];
@@ -325,16 +325,14 @@ window.getCartTotal = function() {
       }
     }
   }
-  return total;
-};
 
-document.getElementById("order").addEventListener("click", () => {
-  if (cart.length === 0) {
-    alert("Your cart is empty. Please add items before proceeding to checkout.");
-  } else {
-    window.location.href = "checkout.html"; // Redirect only if cart has items
-  }
-});
+  // ✅ Save both total and cart
+  localStorage.setItem("orderTotal", total);
+  localStorage.setItem("orderCart", JSON.stringify(cart));
+
+  // Redirect to checkout
+  window.location.href = "checkout.html";
+}
 
     document.addEventListener("DOMContentLoaded", () => {
       renderCategories();
@@ -356,3 +354,55 @@ document.getElementById("order").addEventListener("click", () => {
         updateCartCount();
       });
     });
+
+window.addEventListener("load", function () {
+  // ✅ Success case
+  const successData = JSON.parse(localStorage.getItem("paymentSuccess"));
+  if (successData) {
+    let summary = "<h3>🧾 Order Summary:</h3><ul>";
+    for (const productName in successData.cart) {
+      const item = successData.cart[productName];
+      let qtyText = item.product.type === "combo"
+        ? `${item.quantity} Pack${item.quantity > 1 ? "s" : ""}`
+        : item.quantity >= 1000
+          ? (item.quantity / 1000).toFixed(2) + " kg"
+          : item.quantity + " g";
+      summary += `<li>${productName}: ${qtyText}</li>`;
+    }
+    summary += "</ul>";
+    summary += `<p><strong>💰 Total Paid:</strong> ₹${successData.total.toFixed(2)}</p>`;
+    summary += `<p><strong>🆔 Payment ID:</strong> ${successData.paymentId}</p>`;
+    summary += `<h3>📍 Delivery Details:</h3>`;
+    summary += `<p>${successData.customer.name}, ${successData.customer.phone}</p>`;
+    summary += `<p>${successData.customer.door}, ${successData.customer.street}, ${successData.customer.area}</p>`;
+    summary += `<p>${successData.customer.city}, ${successData.customer.state} - ${successData.customer.pincode}</p>`;
+
+    document.getElementById("orderSummary").innerHTML = summary;
+    document.getElementById("successModal").style.display = "flex";
+
+    document.getElementById("closeSuccessModal").onclick = closeModal;
+    document.getElementById("okBtn").onclick = closeModal;
+
+    function closeModal() {
+      document.getElementById("successModal").style.display = "none";
+    }
+
+    localStorage.removeItem("paymentSuccess");
+  }
+
+  // ❌ Failure case
+  if (localStorage.getItem("paymentFailure")) {
+    document.getElementById("failureModal").style.display = "flex";
+
+    document.getElementById("closeFailureModal").onclick = closeFailModal;
+    document.getElementById("retryBtn").onclick = function () {
+      window.location.href = "checkout.html";
+    };
+
+    function closeFailModal() {
+      document.getElementById("failureModal").style.display = "none";
+    }
+
+    localStorage.removeItem("paymentFailure");
+  }
+});
