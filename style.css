@@ -622,6 +622,11 @@ html {
   max-width: 500px;
   text-align: left;
   box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+
+  /* 🔑 NEW: limit height + scroll */
+  max-height: 80vh;     /* modal won’t exceed 80% of screen height */
+  overflow-y: auto;     /* vertical scrollbar if content is taller */
+  overflow-x: hidden;   /* no sideways scrollbar */
 }
 
 .modal-content h2 {
