@@ -17,13 +17,24 @@ function renderOrderSummary() {
   let html = "<ul>";
   for (const productName in orderCart) {
     const item = orderCart[productName];
+
+    // Determine quantity text
     let qtyText = item.product.type === "combo"
       ? `${item.quantity} Pack${item.quantity > 1 ? "s" : ""}`
       : item.quantity >= 1000
         ? (item.quantity / 1000).toFixed(2) + " kg"
         : item.quantity + " g";
 
-    html += `<li>${productName} - ${qtyText}</li>`;
+    // Calculate item total price
+    let itemPrice = 0;
+    if (item.product.type === "combo") {
+      itemPrice = item.quantity * item.product.price;
+    } else {
+      const unit = item.product.pricePer === 250 ? 250 : 100;
+      itemPrice = (item.quantity / unit) * item.product.price;
+    }
+
+    html += `<li>${productName} - ${qtyText} - ₹${itemPrice.toFixed(2)}</li>`;
   }
   html += "</ul>";
 
