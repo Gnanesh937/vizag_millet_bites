@@ -95,8 +95,16 @@ document.getElementById("checkout-form").addEventListener("submit", function (e)
         })
       };
 
+  handler: function (response) {
+  var orderData = {
+    customer: customer,
+    cart: orderCart,
+    total: total,
+    paymentId: response.razorpay_payment_id
+  };
+
       // ✅ Send data to Google Sheets
-fetch("https://script.google.com/macros/s/AKfycbwGJe2hfkBYQraE9P761sKTmIOfK9E1fd_CCbhMMCkhRGfhXTPiQJhw5iSvRUXiZn7X/exec", {
+fetch("https://script.google.com/macros/s/AKfycbwpKhup4OIysWqDG4fw2nYq5M9gh2hWv51AIsx9UQQU_RZj_1IRQqTR5nABQ8-yHneg/exec", {
   method: "POST",
   body: JSON.stringify({
     customer: customer,
