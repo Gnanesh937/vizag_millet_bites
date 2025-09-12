@@ -311,26 +311,36 @@ function sendOrder() {
     return;
   }
 
-  // Calculate total
+  let totalWeight = 0;
+  let hasWeight = false;
+  let hasCombo = false;
   let total = 0;
+
   for (const productName in cart) {
     const item = cart[productName];
+
     if (item.product.type === "combo") {
+      hasCombo = true;
       total += item.quantity * item.product.price;
     } else {
-      if (item.product.pricePer === 250) {
-        total += (item.quantity / 250) * item.product.price;
-      } else {
-        total += (item.quantity / 100) * item.product.price;
-      }
+      hasWeight = true;
+      const unit = item.product.pricePer === 250 ? 250 : 100;
+      totalWeight += item.quantity; // quantity already in grams
+      total += (item.quantity / unit) * item.product.price;
     }
   }
 
-  // ✅ Save both total and cart
+  // ✅ Enforce minimum 500g for only weight-based orders
+  if (hasWeight && !hasCombo && totalWeight < 500) {
+    alert("Minimum order for weight-based products is 500g!");
+    return;
+  }
+
+  // Save total and cart
   localStorage.setItem("orderTotal", total);
   localStorage.setItem("orderCart", JSON.stringify(cart));
 
-  // Redirect to checkout
+  // Redirect to checkout page
   window.location.href = "checkout.html";
 }
 
