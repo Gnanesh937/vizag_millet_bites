@@ -96,7 +96,7 @@ document.getElementById("checkout-form").addEventListener("submit", function (e)
       };
 
       // ✅ Send data to Google Sheets
-fetch("https://script.google.com/macros/s/AKfycby7kFUCAORDK8M2dRmwD2SXEXZeFHqscKptfFvnISxEleK9719sfVz8o_fK6Fc4O0V0/exec", {
+fetch("https://script.google.com/macros/s/AKfycbwGJe2hfkBYQraE9P761sKTmIOfK9E1fd_CCbhMMCkhRGfhXTPiQJhw5iSvRUXiZn7X/exec", {
   method: "POST",
   body: JSON.stringify({
     customer: customer,
