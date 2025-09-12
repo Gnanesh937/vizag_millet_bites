@@ -21,7 +21,7 @@
       <p>Total: ₹0.00</p>
     </div>
     <div class="cart-buttons">
-      <a href="checkout.html"><button class="order">Pay Now</button></a>
+      <button onclick="sendOrder()">Pay Now</button>
       <button class="clear">Clear Cart</button>
     </div>
   </div>
@@ -36,7 +36,7 @@
         <a href="#reviews">Reviews</a>
       </nav>
       <div class="cart-icon" id="cartIcon">
-        🛒
+        <img src="cart.png" width="60" height="60" alt="Cart">
         <span class="cart-count" id="cartCount">0</span>
       </div>
     </div>
@@ -70,12 +70,14 @@
 </section>
 
 <section id="menu" class="menu">
+  <div class="menu-header">
+  <h2>Our Menu</h2>
   <!-- Cart Icon -->
-  <div class="cart-icon" id="cartIcon2" style="text-align: right; font-weight: bold; padding: 10px 10px;">
-      🛒Cart
+  <div class="cart-icon" id="cartIcon2" style="text-align: right; font-weight: bold; padding: 5px 5px;">
+      <img src="cart.png" width="60" height="60" alt="Cart">
       <span class="cart-count" id="cartCount2">0</span>
   </div>
-  <h2>Our Menu</h2>
+  </div>
   <div class="product-grid" id="category-grid"></div>
   <div class="product-grid" id="product-grid" style="margin-top: 30px;"></div>
 </section>
@@ -138,6 +140,29 @@
     &copy; 2025 Millet Bites. All rights reserved.
   </footer>
   <a href="https://wa.me/919949840365" class="whatsapp-float" target="_blank">💬</a>
+  
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <span id="closeSuccessModal" class="close">&times;</span>
+    <h2>✅ Payment Successful!</h2>
+    <p style="color:red; font-weight:bold;">📸 Please take a screenshot of this page for your reference.</p>
+    <div id="orderSummary"></div>
+    <button id="okBtn">OK</button>
+  </div>
+</div>
+
+<!-- Failure Modal -->
+<div id="failureModal" class="modal">
+  <div class="modal-content">
+    <span id="closeFailureModal" class="close">&times;</span>
+    <h2 style="color:red;">❌ Payment Failed or Canceled</h2>
+    <p>Please try again. Your cart is still saved.</p>
+    <button id="retryBtn">Order Again</button>
+  </div>
+</div>
+
+
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
