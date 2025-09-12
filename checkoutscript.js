@@ -1,4 +1,3 @@
-
 // ✅ Get order details from localStorage
 var total = parseFloat(localStorage.getItem("orderTotal")) || 0;
 var orderCart = JSON.parse(localStorage.getItem("orderCart")) || {};
@@ -95,32 +94,6 @@ document.getElementById("checkout-form").addEventListener("submit", function (e)
           };
         })
       };
-
-      // ✅ Send data to Google Sheets
-fetch("https://script.google.com/macros/s/AKfycby7kFUCAORDK8M2dRmwD2SXEXZeFHqscKptfFvnISxEleK9719sfVz8o_fK6Fc4O0V0/exec", {
-  method: "POST",
-  body: JSON.stringify({
-    customer: customer,
-    paymentId: response.razorpay_payment_id,
-    total: total,
-    items: Object.keys(orderCart).map(name => {
-      const item = orderCart[name];
-      let itemPrice = item.product.type === "combo"
-        ? item.quantity * item.product.price
-        : (item.quantity / (item.product.pricePer === 250 ? 250 : 100)) * item.product.price;
-
-      return {
-        name: name,
-        quantity: item.quantity >= 1000 ? (item.quantity/1000).toFixed(2) + " kg" : item.quantity + " g",
-        price: itemPrice
-      };
-    })
-  }),
-  headers: { "Content-Type": "application/json" }
-})
-.then(res => res.json())
-.then(data => console.log("📧 Emails sent:", data))
-.catch(err => console.error("❌ Email error:", err));
 
       // ✅ Save success details in localStorage
       localStorage.setItem("paymentSuccess", JSON.stringify({
