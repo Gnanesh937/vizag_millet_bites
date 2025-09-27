@@ -3,21 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order Success | Millet Bites</title>
+  <title>Payment Success | Millet Bites</title>
   <link rel="stylesheet" href="successstyle.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
   <div class="success-container">
-    <h2>🎉 Thank You for Your Purchase!</h2>
-    <p>Your payment was successful.</p>
-
-    <div id="order-summary" class="order-summary"></div>
-
-    <button onclick="downloadPDF()">📄 Download Invoice</button>
-    <a href="index.html#home" class="home-button">🏠 Back to Home</a>
+    <h2>✅ Payment Successful</h2>
+    <p>Thank you for shopping with Millet Bites!</p>
+    <button id="download-btn">⬇ Download Invoice (PDF)</button>
+    <a href="index.html#home"><button>🏠 Back to Home</button></a>
   </div>
-
   <script src="successscript.js"></script>
 </body>
 </html>
