@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Millet Bites</title>
+  <link rel="stylesheet" href="indexstyle.css">
+  <script defer src="indexscript.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Millet Bites</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <h2>Healthy, Delicious Millet Snacks</h2>
+      <p>Discover our wide range of millet-based bites made for your health and taste buds!</p>
+      <a href="#products" class="btn-primary">Shop Now</a>
+    </section>
+
+    <section id="products" class="products">
+      <h2>Our Products</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="images/product1.jpg" alt="Product 1">
+          <h3>Millet Bites Classic</h3>
+          <p>250g pack of crunchy millet bites.</p>
+          <p class="price">₹120</p>
+          <button class="add-to-cart" data-name="Millet Bites Classic" data-price="120" data-type="single" data-unit="250">Add to Cart</button>
+        </div>
+        <div class="product-card">
+          <img src="images/product2.jpg" alt="Product 2">
+          <h3>Millet Bites Combo</h3>
+          <p>Mix & match your favorite flavors.</p>
+          <p class="price">₹300</p>
+          <button class="add-to-cart" data-name="Millet Bites Combo" data-price="300" data-type="combo" data-unit="1">Add to Cart</button>
+        </div>
+        <!-- Add more products as needed -->
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2>Contact Us</h2>
+      <form id="contact-form">
+        <label for="contact-name">Name</label>
+        <input type="text" id="contact-name" required>
+
+        <label for="contact-email">Email</label>
+        <input type="email" id="contact-email" required>
+
+        <label for="contact-message">Message</label>
+        <textarea id="contact-message" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Millet Bites. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
