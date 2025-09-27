@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     items.push([
       name,
       item.quantity.toString(),
-      "Rs" + itemTotal.toFixed(2) // ✅ Correct rupee symbol
+      "Rs " + itemTotal.toFixed(2) // ✅ Correct rupee symbol
     ]);
   }
 
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const finalY = doc.lastAutoTable.finalY + 10;
   doc.setFontSize(13);
   doc.setTextColor(0, 102, 0);
-  doc.text("Total: ₹" + orderSummary.total.toFixed(2), 150, finalY);
+  doc.text("Total: Rs " + orderSummary.total.toFixed(2), 150, finalY);
 
   // --- Footer ---
   doc.setFontSize(10);
