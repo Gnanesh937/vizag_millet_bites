@@ -1,64 +1,51 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f7f9fc;
+  background: #f0f7f4;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  margin: 0;
 }
 
 .success-container {
   background: #fff;
   padding: 30px;
   border-radius: 12px;
+  text-align: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
+  max-width: 400px;
 }
 
-.success-container h2 {
+h2 {
   color: #28a745;
-  margin-bottom: 10px;
-}
-
-.order-summary {
-  margin: 20px 0;
-  text-align: left;
-  border-top: 1px solid #ddd;
-  padding-top: 15px;
-}
-
-button, .home-button {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
 }
 
 button {
-  background: #3399cc;
-  color: white;
+  margin: 10px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-button:hover {
-  background: #287aa6;
-  transform: scale(1.05);
+#download-btn {
+  background: #007bff;
+  color: #fff;
 }
 
-.home-button {
+#download-btn:hover {
+  background: #0056b3;
+}
+
+a button {
   background: #ff7043;
   color: white;
 }
 
-.home-button:hover {
+a button:hover {
   background: #e64a19;
-  transform: scale(1.05);
 }
