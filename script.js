@@ -351,8 +351,30 @@ window.addEventListener("load", function () {
     document.getElementById("orderSummary").innerHTML = summary;
     document.getElementById("successModal").style.display = "flex";
 
-    document.getElementById("closeSuccessModal").onclick = () => document.getElementById("successModal").style.display = "none";
-    document.getElementById("okBtn").onclick = () => document.getElementById("successModal").style.display = "none";
+    // OK button closes modal
+    document.getElementById("okBtn").onclick = () => {
+      document.getElementById("successModal").style.display = "none";
+    };
+
+    // Create Screenshot button if it doesn't exist
+    if (!document.getElementById("screenshotBtn")) {
+      const btn = document.createElement("button");
+      btn.id = "screenshotBtn";
+      btn.textContent = "📸 Screenshot";
+      btn.style.cssText = "position:absolute; top:15px; right:15px; padding:8px 12px; border:none; border-radius:6px; cursor:pointer; background:#ff7043; color:#fff;";
+      btn.onclick = () => {
+        // Capture screenshot of orderSummary div
+        const captureEl = document.getElementById("orderSummary");
+        html2canvas(captureEl).then(canvas => {
+          const link = document.createElement("a");
+          link.download = "order_summary.png";
+          link.href = canvas.toDataURL();
+          link.click();
+        });
+      };
+      // Append to modal content
+      document.getElementById("successModal").querySelector("div").appendChild(btn);
+    }
 
     localStorage.removeItem("paymentSuccess");
   }
@@ -604,3 +626,4 @@ function openProductModal(product) {
   // focus for accessibility
   select.focus();
 }
+
