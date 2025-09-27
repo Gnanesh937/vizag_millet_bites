@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Load cart and total from localStorage
   let cart = JSON.parse(localStorage.getItem("orderCart")) || {};
   let total = parseFloat(localStorage.getItem("orderTotal")) || 0;
 
@@ -6,10 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const orderTotalP = document.getElementById("order-total");
   const checkoutForm = document.getElementById("checkout-form");
 
+  // Helper: format quantity string for display
   function formatQuantity(item) {
     if (item.product.type === "combo") {
       return `${item.quantity} Pack${item.quantity > 1 ? "s" : ""}`;
     } else {
+      const unit = item.product.pricePer === 250 ? 250 : 100;
       if (item.quantity >= 1000) {
         return (item.quantity / 1000).toFixed(2) + " kg";
       } else {
@@ -18,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Helper: compute item total price
   function computeItemTotal(item) {
     if (item.product.type === "combo") {
       return item.quantity * item.product.price;
@@ -27,12 +31,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Populate the table body
   if (Object.keys(cart).length === 0) {
     orderItemsTbody.innerHTML =
       `<tr><td colspan="3" style="text-align:center; padding:12px;">Your cart is empty.</td></tr>`;
     orderTotalP.textContent = "";
   } else {
-    orderItemsTbody.innerHTML = "";
+    orderItemsTbody.innerHTML = ""; // clear existing rows
     for (const productName in cart) {
       const item = cart[productName];
       const itemTotal = computeItemTotal(item);
@@ -60,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     orderTotalP.textContent = "Total: ₹" + total.toFixed(2);
   }
 
+  // Handle checkout form submission (Razorpay flow)
   checkoutForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -68,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Collect customer info
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -81,13 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const customer = { name, phone, email, door, street, area, nearby, city, state, pincode };
 
+    // Razorpay options - replace key with your actual key
     const options = {
-      key: "rzp_test_RGFvmNP1FiIT6V", // replace with your Razorpay key
-      amount: Math.round(total * 100),
+      key: "rzp_test_RGFvmNP1FiIT6V", // TODO: replace with your Razorpay key
+      amount: Math.round(total * 100), // amount in paise (integer)
       currency: "INR",
       name: "Millet Bites",
       description: "Order Payment",
       handler: function (response) {
+        // Save success summary
         const orderSummary = {
           cart,
           total,
@@ -95,17 +104,26 @@ document.addEventListener("DOMContentLoaded", () => {
           paymentId: response.razorpay_payment_id
         };
         localStorage.setItem("paymentSuccess", JSON.stringify(orderSummary));
+        // Clear cart
         localStorage.removeItem("orderCart");
         localStorage.removeItem("orderTotal");
-        window.location.href = "success.html";
+        // Redirect to home (or success page)
+        window.location.href = "index.html#home";
       },
-      prefill: { name, email, contact: phone },
-      theme: { color: "#ff7043" }
+      prefill: {
+        name: name,
+        email: email,
+        contact: phone
+      },
+      theme: {
+        color: "#ff7043"
+      }
     };
 
     const rzp = new Razorpay(options);
     rzp.open();
 
+    // Payment failed handler
     rzp.on("payment.failed", function () {
       localStorage.setItem("paymentFailure", "true");
       window.location.href = "index.html#home";
@@ -113,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Back to Cart function
 function goBackToCart() {
   window.history.back();
 }
