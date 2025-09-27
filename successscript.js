@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     items.push([
       name,
       item.quantity.toString(),
-      "₹" + itemTotal.toFixed(2) // ✅ Correct rupee symbol
+      "Rs" + itemTotal.toFixed(2) // ✅ Correct rupee symbol
     ]);
   }
 
